@@ -11,7 +11,7 @@ chmod +x ./downloadmp3.sh
 ```
 Puis, l'exécuter avec:
 ```bash
-./downloadmp3 /chemin/absolu/dossier/dest/ /chemin/absolu/image.jpg url-youtube-musique-ou-playlist
+./downloadmp3.sh /chemin/absolu/dossier/dest/ /chemin/absolu/image.jpg url-youtube-musique-ou-playlist
 ```
 
 ### Exemple
