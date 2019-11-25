@@ -2,6 +2,9 @@
 Ce script permet de télécharger l'audio de une ou plusieurs vidéos Youtube en format mp3, et d'ajouter une image à ces mp3.
 
 ### Utilisation
+
+**Ce script utlise les paquets youtube-dl et ffmpeg, donc veiller à les installer avant toute chose.**
+
 Une fois un terminal ouvert dans le dossier, rendre le script exécutable avec:
 ```bash
 sudo chmod +x ./downloadmp3.sh
