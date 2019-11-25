@@ -22,14 +22,14 @@ if [ ${?} -ne 0 ]; then
 	exit -1
 fi
 
-if [ $# -ne 3 ]; then 
+if [ ${#} -ne 3 ]; then 
 	echo "You must pass the folder to download to, the image name and the youtube link to the script"
 	exit -1
 fi
 
-dest_folder=$1
-image=$2
-url=$3
+dest_folder=${1}
+image=${2}
+url=${3}
 
 echo "\ndestination folder: ${dest_folder}\ncover image: ${image}\nmp3 url: ${url}\n"
 
@@ -64,7 +64,7 @@ do
 	echo "\n${filename} will become ${dest} and have a cover image"
 	mv "${dest_folder}/${filename}" "${dest_folder}/${src}"
 	ffmpeg -i ${dest_folder}/${src} -i ${image} -map_metadata 0 -map 0 -map 1 ${dest_folder}/${dest}
-	rm ${dest_folder}/${src}
+	rm -f ${dest_folder}/${src}
 done
 
 
