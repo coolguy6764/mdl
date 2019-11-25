@@ -7,7 +7,7 @@ Ce script permet de télécharger l'audio de une ou plusieurs vidéos Youtube en
 
 Une fois un terminal ouvert dans le dossier, rendre le script exécutable avec:
 ```bash
-sudo chmod +x ./downloadmp3.sh
+chmod +x ./downloadmp3.sh
 ```
 Puis, l'exécuter avec:
 ```bash
