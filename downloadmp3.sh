@@ -10,6 +10,76 @@
 
 #!/bin/bash
 
+help() {
+	usage
+	echo "
+Options:
+	-h		Print this help text and exit
+	-a \"Artist\"	Set the artist name
+	-A \"Album\"	Set the album name
+	-g \"Genre\"	Set the genre name
+	-y XXXX		Set the year
+	-i /absolute/path/to/image
+			Set the cover image
+	-d /absolute/path/to/destination/directory/
+			Set the destination directory to download the mp3 file(s)	
+	"
+}
+
+usage() {
+	echo "Usage: ${0} [OPTIONS] URL"
+}
+
+exit_abnormal(){
+	usage
+	exit 1
+}
+
+ARTIST=""
+ALBUM=""
+GENRE=""
+YEAR=""
+IMG=""
+DEST=""
+
+while getopts ":ha:A:g:y:i:d:" options; do
+	case "${options}" in
+		h)
+			help
+			exit 0
+		;;
+		a)
+			ARTIST=${OPTARG}
+			echo ${ARTIST}
+		;;
+		A)
+			ALBUM=${OPTARG}
+			echo ${ARTIST}
+		;;
+		g)
+			GENRE=${OPTARG}
+			echo ${ARTIST}
+		;;
+		y)
+			YEAR=${OPTARG}
+			echo ${ARTIST}
+		;;
+		i)
+			IMG=${OPTARG}
+			echo ${ARTIST}
+		;;
+		d)
+			DEST=${OPTARG}
+			echo ${ARTIST}
+		;;
+		*)
+			exit_abnormal
+		;;
+	esac
+done
+
+exit 0
+
 hash youtube-dl
 if [ ${?} -ne 0 ]; then
 	echo "youtube-dl required"
@@ -39,8 +109,8 @@ if [ $(ls -1 ${dest_folder}/*.mp3 | wc -l) -ne 0 ]; then
 	read -r -p "The program is going to remove all mp3 files before downloading, are you sure ? (y/n) : " input 
 	case ${input} in
 		[yY])
-	 ;;
-    	*)
+	;;
+ 	*)
 		 echo "exit"
 		 exit 0
 	 ;;
@@ -52,7 +122,7 @@ fi
 
 ###--------------------------------------------------Download audio
 echo "\nStart downloading music from url..."
-youtube-dl --extract-audio --audio-format mp3 ${url} -o  ${dest_folder}/'%(title)s.mp3'
+youtube-dl -x --audio-format mp3 ${url} -o  ${dest_folder}/'%(title)s.mp3'
 
 
 ###-------------------------------------------Rename and add cover image
