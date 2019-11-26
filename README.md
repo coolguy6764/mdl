@@ -5,13 +5,10 @@ Ce script permet de télécharger l'audio de une ou plusieurs vidéos Youtube en
 
 **Ce script utlise les paquets youtube-dl, ffmpeg et mid3v2, donc veiller à les installer avant toute chose.**
 
-Une fois un terminal ouvert dans le dossier téléchargé, rendre le script d'installation exécutable avec:
+Une fois un terminal ouvert dans le dossier téléchargé, rendre le script d'installation exécutable et le lancer avec:
 ```bash
 chmod +x ./install.sh
-```
-Puis, l'exécuter avec:
-```bash
-./install.sh
+sudo ./install.sh
 ```
 Cela permet d'utiliser le script `downloadmp3` à partir de n'importe quel dossier.
 
@@ -19,7 +16,11 @@ Pour vérifier l'installation, ouvrir un nouveau terminal et afficher l'aide ave
 ```bash
 downloadmp3 -h
 ```
-
+Pour désinstaller il suffit d'exécuter:
+```bash
+chmod +x ./uninstall.sh
+sudo ./uninstall.sh
+```
 ### Exemples
 
 L'utilisation la plus simple, `downloadmp3 -u url-youtube-musique-ou-playlist`, donne:
