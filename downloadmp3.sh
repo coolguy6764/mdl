@@ -27,7 +27,7 @@ Options:
 }
 
 usage() {
-	echo "Usage: ${0} [OPTIONS] URL"
+	echo "Usage: ${0} [OPTIONS] -u URL"
 }
 
 exit_abnormal(){
@@ -41,8 +41,9 @@ GENRE=""
 YEAR=""
 IMG=""
 DEST=""
+URL=""
 
-while getopts ":ha:A:g:y:i:d:" options; do
+while getopts ":ha:A:g:y:i:d:u:" options; do
 	case "${options}" in
 		h)
 			help
@@ -50,27 +51,24 @@ while getopts ":ha:A:g:y:i:d:" options; do
 		;;
 		a)
 			ARTIST=${OPTARG}
-			echo ${ARTIST}
 		;;
 		A)
 			ALBUM=${OPTARG}
-			echo ${ARTIST}
 		;;
 		g)
 			GENRE=${OPTARG}
-			echo ${ARTIST}
 		;;
 		y)
 			YEAR=${OPTARG}
-			echo ${ARTIST}
 		;;
 		i)
 			IMG=${OPTARG}
-			echo ${ARTIST}
 		;;
 		d)
 			DEST=${OPTARG}
-			echo ${ARTIST}
+		;;	
+		u)
+			URL=${OPTARG}
 		;;
 		*)
 			exit_abnormal
@@ -78,7 +76,23 @@ while getopts ":ha:A:g:y:i:d:" options; do
 	esac
 done
 
+if [ "${URL}" = "" ]; then
+	exit_abnormal
+fi
+
+verif_package(){
+	hash ${1}
+	if [ ${?} -ne 0 ]; then
+		echo "${1} required"
+		exit 1
+	fi
+
+}
+
+verif_package "youtube-dl"
+verif_package "ffmpeg"
 exit 0
+
 
 hash youtube-dl
 if [ ${?} -ne 0 ]; then
@@ -96,10 +110,6 @@ if [ ${#} -ne 3 ]; then
 	echo "You must pass the folder to download to, the image name and the youtube link to the script"
 	exit -1
 fi
-
-dest_folder=${1}
-image=${2}
-url=${3}
 
 echo "\ndestination folder: ${dest_folder}\ncover image: ${image}\nmp3 url: ${url}\n"
 
