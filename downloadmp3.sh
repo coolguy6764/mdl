@@ -1,10 +1,20 @@
-# Script qui télécharge le mp3 d'une ou plusieurs vidéos,
-# renomme les fichiers mp3 contenant des espaces (les remplace par des underscores)
-# et intègre l'image passée en paramètre aux nouveaux mp3
+# Script qui télécharge l'audio d'une ou plusieurs vidéos en format mp3
+# selon l'aborescence:
+#	Dossier
+#	└── Artiste
+#	    └── Album
+#	        └── titre1.mp3
+#	        └── ... 
+# Plusieurs options permettent d'entrer des informations au(x) mp3 comme 
+# le nom d'artiste, d'album, le genre, la date ou encore une image de couverture
 
 # /!\ Attention /!\ 
-# Vous devez avoir installé les paquets youtube-dl (nécessaire au téléchargement des mp3)
-# et ffmpeg (nécessaire à l'inclusion de l'image aux mp3)
+# Les paquets utilisés sont:
+#	youtube-dl (téléchargement des mp3)
+#	ffmpeg (inclusion de l'image aux mp3)
+#	mid3v2 (inclusion d'informations supplémentaires: album, artiste, année, etc.. )
+# Veiller à les installer avant toute chose
+
 
 ###---------------------------------------------------------------------------------------
 
@@ -130,7 +140,7 @@ if [ $(ls -1 *.mp3 | wc -l) -ne 0 ]; then
 	;;
  	*)
 		 exit 0
-	 ;;
+	;;
 	esac
 
 	echo "Delete all mp3 files in folder..."
