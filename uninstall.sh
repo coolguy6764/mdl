@@ -4,4 +4,6 @@
 
 script="downloadmp3"
 rm -f "/usr/local/bin/${script}"
-echo "${script} désinstallé"
+if [ ${?} -eq 0 ];then
+	echo "${script} désinstallé"
+fi

@@ -33,6 +33,8 @@ Options:
 			Set the cover image
 	-d /absolute/path/to/destination/directory/
 			Set the destination directory to download the mp3 file(s)	
+	-r "exp1/exp2/[...]/expn"
+			Indicates the expressions to remove in the song name
 	"
 }
 
@@ -54,9 +56,9 @@ GENRE=""
 YEAR=""
 IMG=""
 DEST=""
-URL=""
+ALL_EXPR=""
 
-while getopts ":ha:A:g:y:i:d:u:" options; do
+while getopts ":ha:A:g:y:i:d:u:r:" options; do
 	case "${options}" in
 		h)
 			help
@@ -83,11 +85,32 @@ while getopts ":ha:A:g:y:i:d:u:" options; do
 		u)
 			URL=${OPTARG}
 		;;
+		r)
+			ALL_EXPR=${OPTARG}
+		;;
 		*)
 			exit_abnormal
 		;;
 	esac
 done
+
+iterate=true
+while [ ${iterate} = true ]
+do
+	case ${ALL_EXPR} in
+		*"/"*)
+			;;
+		*)
+			iterate=false
+			;;
+	esac
+
+	exp=${ALL_EXPR##*/}
+	ALL_EXPR=${ALL_EXPR%/*}
+	echo "${exp}"
+done
+
+exit 0
 
 #-----------------------------------Make some verifications and modifications if needed
 
@@ -156,8 +179,7 @@ youtube-dl -x --audio-format mp3 ${URL} -o '%(title)s.mp3'
 i=0
 for entry in *".mp3"
 do
-	filename=$(basename "${entry}")
-	dest=$(echo ${filename} | tr ' ' '_')
+	dest=$(echo ${entry} | tr ' ' '_')
 	src="_${dest}"
 	mv "${filename}" "${src}"
 	if [ "${IMG}" != "" ]; then

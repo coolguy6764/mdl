@@ -4,5 +4,7 @@
 
 script="downloadmp3"
 chmod +x "${script}.sh"
-cp "${script}.sh" "/usr/local/bin/${script}.sh"
-echo "${script} installé"
+cp "${script}.sh" "/usr/local/bin/${script}"
+if [ ${?} -eq 0 ];then
+	echo "${script} installé"
+fi
