@@ -96,48 +96,66 @@ verif_package(){
 
 verif_package "youtube-dl"
 verif_package "ffmpeg"
+verif_package "mid3v2"
 
 if [ "${DEST}" = "" ] ; then
 	DEST="."
 fi
+if [ "${ARTIST}" = "" ] ; then
+	ARTIST="Inconnu"
+fi
+if [ "${ALBUM}" = "" ] ; then
+	ALBUM="Inconnu"
+fi
+if [ "${GENRE}" = "" ] ; then
+	GENRE="Inconnu"
+fi
+if [ "${YEAR}" = "" ] ; then
+	YEAR="0000"
+fi
 
 
-echo ${DEST}
-exit 0
-
+#--------------------Create folder arborescence
+cd ${DEST}
+tree="${ARTIST}/${ALBUM}"
+mkdir -p "${tree}"
+cd "${tree}"
 
 ###--------------------------------Delete mp3
-if [ $(ls -1 ${dest_folder}/*.mp3 | wc -l) -ne 0 ]; then
-	ls -lh ${dest_folder}
-	read -r -p "The program is going to remove all mp3 files before downloading, are you sure ? (y/n) : " input 
+if [ $(ls -1 *.mp3 | wc -l) -ne 0 ]; then
+	ls -lh 
+	read -p "The program is going to remove all mp3 files in \"${DEST}/${tree}\" before downloading, are you sure ? (y/n) : " input 
 	case ${input} in
 		[yY])
 	;;
  	*)
-		 echo "exit"
 		 exit 0
 	 ;;
 	esac
 
 	echo "Delete all mp3 files in folder..."
-	rm -f ${dest_folder}/*.mp3
+	rm -f *.mp3
 fi
 
-###--------------------------------------------------Download audio
+###--------------------------------------------------Download mp3 file(s)
 echo "\nStart downloading music from url..."
-youtube-dl -x --audio-format mp3 ${url} -o  ${dest_folder}/'%(title)s.mp3'
+youtube-dl -x --audio-format mp3 ${URL} -o '%(title)s.mp3'
 
 
-###-------------------------------------------Rename and add cover image
-for entry in "${dest_folder}"/*"mp3"
+###-------------------------------------------Rename file(s) and add cover image
+for entry in *".mp3"
 do
 	filename=$(basename "${entry}")
 	dest=$(echo ${filename} | tr ' ' '_')
 	src="_${dest}"
-	echo "\n${filename} will become ${dest} and have a cover image"
-	mv "${dest_folder}/${filename}" "${dest_folder}/${src}"
-	ffmpeg -i ${dest_folder}/${src} -i ${image} -map_metadata 0 -map 0 -map 1 ${dest_folder}/${dest}
-	rm -f ${dest_folder}/${src}
+	mv "${filename}" "${src}"
+	if [ "${IMG}" != "" ]; then
+		ffmpeg -i ${src} -i ${IMG} -map_metadata 0 -map 0 -map 1 ${dest}
+	else
+		mv "${src}" "${dest}"
+	fi
+	rm -f ${src}
+	mid3v2 -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} ${dest}
 done
 
 
