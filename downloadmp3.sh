@@ -143,6 +143,7 @@ youtube-dl -x --audio-format mp3 ${URL} -o '%(title)s.mp3'
 
 
 ###-------------------------------------------Rename file(s) and add cover image
+i=0
 for entry in *".mp3"
 do
 	filename=$(basename "${entry}")
@@ -155,7 +156,8 @@ do
 		mv "${src}" "${dest}"
 	fi
 	rm -f ${src}
-	mid3v2 -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} ${dest}
+	i=$((i+1))
+	mid3v2 -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${i}" ${dest}
 done
 
 
