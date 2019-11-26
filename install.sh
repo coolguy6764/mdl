@@ -2,8 +2,8 @@
 
 #!/bin/bash
 
-chmod +x downloadmp3
-cp downloadmp3 /usr/local/bin
+chmod +x downloadmp3.sh
+cp downloadmp3.sh /usr/local/bin/downloadmp3
 
 cd ~
 shname="$(pwd)/.$(basename ${SHELL})rc" 
