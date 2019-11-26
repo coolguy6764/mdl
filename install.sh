@@ -2,10 +2,7 @@
 
 #!/bin/bash
 
-chmod +x downloadmp3.sh
-cp downloadmp3.sh /usr/local/bin/downloadmp3
-
-cd ~
-shname="$(pwd)/.$(basename ${SHELL})rc" 
-echo ${shname}
-. ${shname} # syntax error
+script="downloadmp3"
+chmod +x "${script}.sh"
+cp "${script}.sh" "/usr/local/bin/${script}.sh"
+echo "${script} installé"
