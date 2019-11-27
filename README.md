@@ -77,6 +77,7 @@ Musique
 Le script intègre des informations à chaque fichier mp3, en plus de l'image.
 - Artiste, Album, Genre et date:
 `downloadmp3 -i /chemin/absolu/image -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" -g "Chanson française" -y 2019`
+Par défaut, l'artiste, l'album et le genre sont *"Inconnu"* et date est *0000*.
 
 - Renseigner des expressions à supprimer:
 
