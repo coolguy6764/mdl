@@ -5,7 +5,7 @@ De plus, il est possible de renseigner d'autres informations aux musiques télé
 
 *downloadmp3.sh* intègre de façon automatique le titre de(s) musique(s) comme titre de(s) mp3(s), mais parfois le titre contient des expressions inutiles, qui peuvent être supprimées.
 
-Enfin, on peut choisir d'extraire directement le nom de l'artiste si le titre est de la forme "artiste - titre musique".
+Enfin, on peut choisir d'extraire directement le nom de l'artiste si le titre est de la forme *"artiste - titre musique"*.
 
 ### Installation
 
@@ -37,10 +37,10 @@ dossier
         └── ...       
 ```
 
-- Mode manuel:
+- Mode normal:
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -a "Artiste" -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
-- Mode extract: A utiliser si le titre des musiques Youtube ressemble à "artiste - titre musique"
+- Mode extract: A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musique"*
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
 ### Exemples
@@ -80,10 +80,16 @@ Le script intègre des informations à chaque fichier mp3, en plus de l'image.
 
 - Renseigner des expressions à supprimer:
 
-`downloadmp3 -i /chemin/absolu/image -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" -g "Chanson française" -y 2019 -r "(audio)/lyrics/live"`
+`downloadmp3 -i /chemin/absolu/image -u URL -r "(audio)/lyrics/live"`
 
-Cela enlèvera toute occurence des expressions (audio), lyrics et live, sans être sensible à la casse.
-Par défaut seules les expressions " - " sont enlevées (en général pour séparer l'artiste du titre).
+Cela enlèvera toute occurence des expressions *"(audio)"*, *"lyrics"* et *"live"*, **sans être sensible à la casse**.
+Par défaut seules les expressions *" - "* sont enlevées (en général pour séparer l'artiste du titre).
+
+### Etapes
+1. Choisir une playlist ou une musique sur Youtube
+2. Télécharger une image de couverture de l'album
+3. Ouvrir un terminal **bash**
+5. Lancer le script avec les options choisies en fonction des titres des musiques
 
 ### Notes
 - L'url n'est pas forcément une playlist, ce peut être une simple musique
