@@ -259,13 +259,11 @@ rn_info() {
 
 case ${artopt} in
 	0 | a)
-		echo "Manual option"
 		arbor
 		dl
 		rn_info
 		;;
 	e)
-		echo "Extract option"
 		cd ${DEST}
 		dl
 		rn_info
