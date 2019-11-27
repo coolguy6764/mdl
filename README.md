@@ -41,9 +41,11 @@ dossier
 
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -a "Artiste" -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
-- Mode extract: A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musique"*
+- Mode extract:
 
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
+
+A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musique"*
 
 ### Exemples
 
@@ -98,6 +100,7 @@ Par défaut seules les expressions *" - "* sont enlevées (en général pour sé
 2. Télécharger une image de couverture de l'album
 3. Ouvrir un terminal **bash**
 5. Lancer le script avec les options choisies en fonction des titres des musiques
+6. Vérifier le téléchargement avec votre lecteur mp3 préféré
 
 ### Notes
 - L'url n'est pas forcément une playlist, ce peut être une simple musique
