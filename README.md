@@ -1,9 +1,9 @@
 # DownloadMusic
-Ce script permet de télécharger l'audio de une ou plusieurs vidéos Youtube en format mp3, et d'ajouter une image à ces mp3. 
+Ce script permet de télécharger l'audio de une ou plusieurs musiques Youtube en format mp3, et d'ajouter une image à ces mp3. 
 
 De façon optionnelle il est possible de renseigner d'autres informations aux musiques téléchargées comme l'album et l'artiste (utile à la création de l'arborescence), le genre ou encore la date.
 
-Enfin, ce script intègre de façon automatique le titre de(s) vidéo(s) comme titre de(s) mp3(s). Il est alors possible de dire quelles expressions supprimer du titre.
+Enfin, ce script intègre de façon automatique le titre de(s) musique(s) comme titre de(s) mp3(s). De plus, il peut gérer des expressions à supprimer du titre.
 
 ### Installation
 
@@ -59,7 +59,7 @@ En indiquant l'artiste et l'auteur, le fichier mp3 intègre ces informations. Il
 
 `downloadmp3 -i /chemin/absolu/image -u url-youtube-musique-ou-playlist -a "Georges Brassens" -A "Le meilleur de Brassens" -g "Chanson française" -y 2019`
 
-Enfin, l'intégration du titre de la vidéo au mp3 se fait automatiquement, mais il est possible de renseigner des expressions à supprimer:
+Enfin, l'intégration du titre de la musique au mp3 se fait automatiquement, mais il est possible de renseigner des expressions à supprimer:
 
 `downloadmp3 -i /chemin/absolu/image -u url-youtube-musique-ou-playlist -a "Georges Brassens" -A "Le meilleur de Brassens" -g "Chanson française" -y 2019 -r "(audio)/lyrics/live"`
 
@@ -67,5 +67,5 @@ Cela enlèvera toute occurence des expressions (audio), lyrics et live, sans êt
 Par défaut seules les expressions " - " sont enlevées (en général pour séparer l'artiste du titre).
 
 ### Notes
-- L'url n'est pas forcément une playlist, ce peut être une simple vidéo
+- L'url n'est pas forcément une playlist, ce peut être une simple musique
 - Il se peut que le téléchargement de l'audio marche sur d'autres sites que Youtube, mais il faut trouver le bon url
