@@ -10,6 +10,8 @@
 # Plusieurs options permettent d'entrer des informations supplémentaires comme 
 # le nom d'artiste, d'album, le genre et la date
 
+# Enlever certaines expressions des titres est aussi faisable
+
 # /!\ Attention /!\ 
 # Les paquets utilisés sont:
 #	youtube-dl (téléchargement des mp3)
@@ -22,6 +24,7 @@
 
 #!/bin/bash
 
+trap "error 'program killed'" 2
 
 help() {
 	usage
@@ -245,7 +248,7 @@ rn_info() {
 			mv "${entry}" "${src}"
 		fi
 
-		ffmpeg -i ${src} -i "${IMG}" -map_metadata 0 -map 0 -map 1 ${dest}
+		ffmpeg -hide_banner -i ${src} -i "${IMG}" -map_metadata 0 -map 0 -map 1 ${dest}
 		rm -f ${src}
 		i=$((i+1))
 		mid3v2 -t "${newname%.mp3*}" -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${i}" ${dest}
