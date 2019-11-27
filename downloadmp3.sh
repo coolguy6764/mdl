@@ -28,13 +28,14 @@ help() {
 	echo "
 Options:
 	-h		Print this help text and exit
+	-i /absolute/path/to/image
+			Set the cover image
+	-u		Indicate the music/playlist address
 	-e 		Extract the artist name (use it if music title is \"artist - song\")
-	-a \"Artist\"	Set the artist name
+	-a \"Artist\"	Set the artist name (not compatible with -e)
 	-A \"Album\"	Set the album name
 	-g \"Genre\"	Set the genre name
 	-y XXXX		Set the year
-	-i /absolute/path/to/image
-			Set the cover image
 	-d /absolute/path/to/destination/directory/
 			Set the destination directory to create the arborescence and download the mp3 file(s)	
 	-r \"exp1/exp2/[...]/expn\"
@@ -54,7 +55,7 @@ error() {
 }
 
 usage() {
-	echo "Usage: $(basename ${0}) [OPTIONS] -i /absolute/path/image -u URL"
+	echo "Usage: $(basename ${0}) -i /absolute/path/image -u URL [OPTIONS]"
 }
 
 exit_abnormal(){
