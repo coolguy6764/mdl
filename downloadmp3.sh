@@ -5,8 +5,10 @@
 #	    └── Album
 #	        └── titre1.mp3
 #	        └── ... 
-# Plusieurs options permettent d'entrer des informations au(x) mp3 comme 
-# le nom d'artiste, d'album, le genre, la date ou encore une image de couverture
+# Une image est requise et sera intégrée au(x) mp3 comme pochette d'album
+
+# Plusieurs options permettent d'entrer des informations supplémentaires comme 
+# le nom d'artiste, d'album, le genre et la date
 
 # /!\ Attention /!\ 
 # Les paquets utilisés sont:
@@ -25,6 +27,7 @@ help() {
 	echo "
 Options:
 	-h		Print this help text and exit
+	-e 		Extract the artist name (use it if music title is \"artist - song\")
 	-a \"Artist\"	Set the artist name
 	-A \"Album\"	Set the album name
 	-g \"Genre\"	Set the genre name
@@ -44,13 +47,17 @@ Warnings:
 	"
 }
 
+error() {
+	echo "${1}" >&2
+	exit 1
+}
+
 usage() {
-	echo "Usage: ${0} [OPTIONS] -i /absolute/path/image -u URL"
+	echo "Usage: $(basename ${0}) [OPTIONS] -i /absolute/path/image -u URL"
 }
 
 exit_abnormal(){
-	usage
-	exit 1
+	error "$(usage)" 
 }
 
 
@@ -64,13 +71,29 @@ IMG=""
 DEST=""
 ALL_EXPR=""
 
-while getopts ":ha:A:g:y:i:d:u:r:" options; do
+artopt="0"
+while getopts ":hea:A:g:y:i:d:u:r:" options; do
 	case "${options}" in
 		h)
 			help
 			exit 0
 			;;
+		e)
+			if [ "${artopt}" = "0" ];then
+				artopt="e"
+			else
+
+				error "options ${options} and ${artopt} are not callable simultaneously"
+			fi
+			;;
 		a)
+			if [ "${artopt}" = "0" ];then
+				artopt="a"
+				ARTIST=${OPTARG}
+			else
+
+				error "options ${options} and ${artopt} are not callable simultaneously"
+			fi
 			ARTIST=${OPTARG}
 			;;
 		A)
@@ -101,7 +124,7 @@ while getopts ":ha:A:g:y:i:d:u:r:" options; do
 done
 
 
-#-----------------------------------Make some verifications and modifications if needed
+#----------------------------------Make some verifications and modifications if needed
 
 if [ "${URL}" = "" ] || [ "${IMG}" = "" ]; then
 	exit_abnormal
@@ -110,10 +133,8 @@ fi
 verif_package(){
 	hash ${1}
 	if [ ${?} -ne 0 ]; then
-		echo "${1} required"
-		exit 1
+		error "${1} required"
 	fi
-
 }
 
 verif_package "youtube-dl"
@@ -157,56 +178,80 @@ if [ "${ALL_EXP}" = "" ] ; then
 fi
 
 
-#----------------------------Create folder arborescence
-cd ${DEST}
-tree="${ARTIST}/${ALBUM}"
-mkdir -p "${tree}"
-cd "${tree}"
 
-###-------------------------------------------Delete mp3
-if [ $(ls -1 *.mp3 | wc -l) -ne 0 ]; then
-	ls -lh 
-	read -n1 -p "The program is going to remove all mp3 files in \"${DEST}/${tree}\" before downloading, are you sure ? (y/n) : " input 
-	case ${input} in
-		[yY])
-	;;
- 	*)
-		 exit 0
-	;;
+arbor() {
+	#----------------------------Create folder arborescence
+	cd ${DEST}
+	tree="${ARTIST}/${ALBUM}"
+	mkdir -p "${tree}"
+	cd "${tree}"
+
+	###-------------------------------------------Delete mp3
+	if [ $(ls -1 *.mp3 | wc -l) -ne 0 ]; then
+		ls -lh 
+		read -n1 -p "The program is going to remove all mp3 files in \"${DEST}/${tree}\" before downloading, are you sure ? (y/n) : " input 
+		case ${input} in
+			[yY])
+				;;
+			*)
+				 exit 0
+				;;
+		esac
+
+		echo -e "\n\rDelete all mp3 files in folder..."
+		rm -f *.mp3
+	fi
+}
+
+dl() {
+	###--------------------------------------------------Download mp3 file(s)
+	echo -e "\nStart downloading music from url..."
+	youtube-dl -x --audio-format mp3 ${URL} -o '%(title)s.mp3'
+}
+
+
+rn_info() {
+	###---------------------Rename, add cover image and info to mp3 file(s)
+	i=0
+	for entry in *".mp3"
+	do
+
+		newname="${entry}"
+		for exp in "${exparray[@]}"
+		do
+			if [ ${#exp} -gt 0 ]; then
+				newname=$( echo "${newname}" | sed "s/${exp}//gI" )
+			fi
+		done
+		
+		newname=$( echo "${newname}" | sed "s/ - //g" )
+		dest=$( echo "${newname}" | sed "s/ /_/g" )
+		echo "new name: ${newname}, dest name: ${dest}"
+
+		src="_${dest}"
+		mv "${entry}" "${src}"
+		ffmpeg -i ${src} -i "${IMG}" -map_metadata 0 -map 0 -map 1 ${dest}
+		rm -f ${src}
+		i=$((i+1))
+		mid3v2 -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${i}" ${dest}
+	done
+}
+
+
+case ${artopt} in
+	0 | a)
+		arbor
+		dl
+		rn_info
+		;;
+	e)
+		echo "extract"
+		dl
+
+		;;
 	esac
 
-	echo -e "\n\rDelete all mp3 files in folder..."
-	rm -f *.mp3
-fi
+exit 0
 
-###--------------------------------------------------Download mp3 file(s)
-echo -e "\nStart downloading music from url..."
-youtube-dl -x --audio-format mp3 ${URL} -o '%(title)s.mp3'
-
-
-###-------------------------------------------Rename file(s) and add cover image
-i=0
-for entry in *".mp3"
-do
-
-	newname="${entry}"
-	for exp in "${exparray[@]}"
-	do
-		if [ ${#exp} -gt 0 ]; then
-			newname=$( echo "${newname}" | sed "s/${exp}//gI" )
-		fi
-	done
-	
-	newname=$( echo "${newname}" | sed "s/ - //g" )
-	dest=$( echo "${newname}" | sed "s/ /_/g" )
-	echo "new name: ${newname}, dest name: ${dest}"
-
-	src="_${dest}"
-	mv "${entry}" "${src}"
-	ffmpeg -i ${src} -i "${IMG}" -map_metadata 0 -map 0 -map 1 ${dest}
-	rm -f ${src}
-	i=$((i+1))
-	mid3v2 -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${i}" ${dest}
-done
 
 
