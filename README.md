@@ -38,14 +38,17 @@ dossier
 ```
 
 - Mode normal:
+
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -a "Artiste" -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
 - Mode extract: A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musique"*
+
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
 ### Exemples
 
 - minimal:
+
 `downloadmp3 -i /chemin/absolu/image -u URL`
 ```
 .
@@ -56,6 +59,7 @@ dossier
 ```
 
 - Artiste et Album:
+
 `downloadmp3 -i /chemin/absolu/image -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" `
 ```
 .
@@ -66,6 +70,7 @@ dossier
 ```
 
 - Dossier de stockage:
+
 `downloadmp3 -i /chemin/absolu/image -u URL -d "/home/user/Musique"`
 ```
 Musique
@@ -76,7 +81,9 @@ Musique
 ```
 Le script intègre des informations à chaque fichier mp3, en plus de l'image.
 - Artiste, Album, Genre et date:
+
 `downloadmp3 -i /chemin/absolu/image -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" -g "Chanson française" -y 2019`
+
 Par défaut, l'artiste, l'album et le genre sont *"Inconnu"* et date est *0000*.
 
 - Renseigner des expressions à supprimer:
