@@ -22,6 +22,7 @@
 
 #!/bin/bash
 
+
 help() {
 	usage
 	echo "
@@ -142,7 +143,7 @@ verif_package "ffmpeg"
 verif_package "mid3v2"
 
 if [ "${DEST}" = "" ] ; then
-	DEST="."
+	DEST="$(pwd)"
 fi
 if [ "${ARTIST}" = "" ] ; then
 	ARTIST="Inconnu"
@@ -185,10 +186,12 @@ arbor() {
 	tree="${ARTIST}/${ALBUM}"
 	mkdir -p "${tree}"
 	cd "${tree}"
+}
 
+del_mp3() {
 	###-------------------------------------------Delete mp3
 	if [ $(ls -1 *.mp3 | wc -l) -ne 0 ]; then
-		ls -lh 
+		ls -lh *.mp3 
 		read -n1 -p "The program is going to remove all mp3 files in \"${DEST}/${tree}\" before downloading, are you sure ? (y/n) : " input 
 		case ${input} in
 			[yY])
@@ -206,7 +209,7 @@ arbor() {
 dl() {
 	###--------------------------------------------------Download mp3 file(s)
 	echo -e "\nStart downloading music from url..."
-	youtube-dl -x --audio-format mp3 ${URL} -o '%(title)s.mp3'
+	youtube-dl -i -x --audio-format mp3 ${URL} -o '%(title)s.mp3'
 }
 
 
@@ -215,7 +218,6 @@ rn_info() {
 	i=0
 	for entry in *".mp3"
 	do
-
 		newname="${entry}"
 		for exp in "${exparray[@]}"
 		do
@@ -223,31 +225,49 @@ rn_info() {
 				newname=$( echo "${newname}" | sed "s/${exp}//gI" )
 			fi
 		done
+
+		if [ "${artopt}" = "e" ];then
+			ARTIST=${newname%% - *}
+			newname=${newname#* - }
+			arbor
+		fi
+		
 		
 		newname=$( echo "${newname}" | sed "s/ - //g" )
 		dest=$( echo "${newname}" | sed "s/ /_/g" )
-		echo "new name: ${newname}, dest name: ${dest}"
-
+		echo -e "\nCreate file: ${dest}"
 		src="_${dest}"
-		mv "${entry}" "${src}"
+
+		if [ "${artopt}" = "e" ];then
+			mv "${DEST}/${entry}" "${src}"
+		else
+			mv "${entry}" "${src}"
+		fi
+
 		ffmpeg -i ${src} -i "${IMG}" -map_metadata 0 -map 0 -map 1 ${dest}
 		rm -f ${src}
 		i=$((i+1))
-		mid3v2 -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${i}" ${dest}
+		mid3v2 -t "${newname%.mp3*}" -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${i}" ${dest}
+	
+		if [ "${artopt}" = "e" ];then
+			cd ${DEST}
+		fi
 	done
 }
 
 
 case ${artopt} in
 	0 | a)
+		echo "Manual option"
 		arbor
 		dl
 		rn_info
 		;;
 	e)
-		echo "extract"
+		echo "Extract option"
+		cd ${DEST}
 		dl
-
+		rn_info
 		;;
 	esac
 
