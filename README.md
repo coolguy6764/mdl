@@ -21,6 +21,8 @@ Pour désinstaller le programme, exécuter:
 ```bash
 sudo ./uninstall.sh
 ```
+Les paquets *youtube-dl*, *ffmpeg* et *mid3v2* peuvent aussi être désinstallés.
+
 Pour vérifier l'installation, afficher l'aide avec:
 ```bash
 downloadmp3 -h
