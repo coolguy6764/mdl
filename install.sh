@@ -1,15 +1,14 @@
-# Make downloadmp3 executable and place it in /usr/local/bin
+# Download dependent packages if they are missing,
+# make downloadmp3 executable and place it in /usr/local/bin
 
 #!/bin/bash
-
-
-trap "error 'installation stopped'" 2
 
 error() {
 	echo "${1}" >&2
 	exit 1
 }
 
+trap "error 'installation stopped'" 2
 
 missing_do_() {
 	hash ${1}
