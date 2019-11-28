@@ -9,25 +9,25 @@ Enfin, on peut choisir d'extraire directement le nom de l'artiste si le titre es
 
 ### Installation
 
-**Ce script utlise les paquets youtube-dl, ffmpeg et mid3v2, donc veiller à les installer avant toute chose.**
+**L'exécution des scripts doit se faire dans un shell bash**
 
-Une fois un terminal ouvert dans le dossier téléchargé, installer le script avec:
+Ouvrir un terminal **bash** et se placer dans le dossier téléchargé, installer *downloadmp3* avec:
 ```bash
 sudo ./install.sh
 ```
-Cela permet d'utiliser le script `downloadmp3` à partir de n'importe quel dossier.
+*downloadmp3* utlise les paquets *youtube-dl*, *ffmpeg* et *mid3v2*, donc s'ils ne sont pas installés, le script d'installation s'en occupe. 
 
-Pour le désinstaller, exécuter:
+Pour désinstaller le programme, exécuter:
 ```bash
 sudo ./uninstall.sh
 ```
-
-**L'exécution de ce script doit se faire dans un shell bash**
-
-Pour vérifier l'installation, ouvrir un nouveau terminal et afficher l'aide avec:
+Pour vérifier l'installation, afficher l'aide avec:
 ```bash
 downloadmp3 -h
 ```
+
+### Utilisation
+
 Le script stocke les musiques téléchargées et traitées de cette manière:
 ```
 dossier
