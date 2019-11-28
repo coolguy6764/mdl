@@ -104,4 +104,4 @@ Par défaut seules les expressions *" - "* sont enlevées (en général pour sé
 
 ### Notes
 - L'url n'est pas forcément une playlist, ce peut être une simple musique
-- Il se peut que le téléchargement de l'audio marche sur d'autres sites que Youtube, mais il faut trouver le bon url
+- Il se peut que le téléchargement de l'audio marche sur d'autres sites que Youtube, pour cela aller voir sur le [dépôt de youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
