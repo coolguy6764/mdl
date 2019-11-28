@@ -9,25 +9,25 @@ Enfin, on peut choisir d'extraire directement le nom de l'artiste si le titre es
 
 ### Installation
 
-**Ce script utlise les paquets youtube-dl, ffmpeg et mid3v2, donc veiller à les installer avant toute chose.**
+**L'exécution des scripts doit se faire dans un shell bash**
 
-Une fois un terminal ouvert dans le dossier téléchargé, installer le script avec:
+Ouvrir un terminal **bash** et se placer dans le dossier téléchargé, installer *downloadmp3* avec:
 ```bash
 sudo ./install.sh
 ```
-Cela permet d'utiliser le script `downloadmp3` à partir de n'importe quel dossier.
+*downloadmp3* utlise les paquets *youtube-dl*, *ffmpeg* et *mid3v2*, donc s'ils ne sont pas installés, le script d'installation s'en occupe. 
 
-Pour le désinstaller, exécuter:
+Pour désinstaller le programme, exécuter:
 ```bash
 sudo ./uninstall.sh
 ```
-
-**L'exécution de ce script doit se faire dans un shell bash**
-
-Pour vérifier l'installation, ouvrir un nouveau terminal et afficher l'aide avec:
+Pour vérifier l'installation, afficher l'aide avec:
 ```bash
 downloadmp3 -h
 ```
+
+### Utilisation
+
 Le script stocke les musiques téléchargées et traitées de cette manière:
 ```
 dossier
@@ -38,14 +38,19 @@ dossier
 ```
 
 - Mode normal:
+
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -a "Artiste" -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
-- Mode extract: A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musique"*
+- Mode extract:
+
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
+
+A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musique"*
 
 ### Exemples
 
 - minimal:
+
 `downloadmp3 -i /chemin/absolu/image -u URL`
 ```
 .
@@ -56,6 +61,7 @@ dossier
 ```
 
 - Artiste et Album:
+
 `downloadmp3 -i /chemin/absolu/image -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" `
 ```
 .
@@ -66,6 +72,7 @@ dossier
 ```
 
 - Dossier de stockage:
+
 `downloadmp3 -i /chemin/absolu/image -u URL -d "/home/user/Musique"`
 ```
 Musique
@@ -76,7 +83,9 @@ Musique
 ```
 Le script intègre des informations à chaque fichier mp3, en plus de l'image.
 - Artiste, Album, Genre et date:
+
 `downloadmp3 -i /chemin/absolu/image -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" -g "Chanson française" -y 2019`
+
 Par défaut, l'artiste, l'album et le genre sont *"Inconnu"* et date est *0000*.
 
 - Renseigner des expressions à supprimer:
@@ -91,7 +100,8 @@ Par défaut seules les expressions *" - "* sont enlevées (en général pour sé
 2. Télécharger une image de couverture de l'album
 3. Ouvrir un terminal **bash**
 5. Lancer le script avec les options choisies en fonction des titres des musiques
+6. Vérifier le téléchargement avec votre lecteur mp3 préféré
 
 ### Notes
 - L'url n'est pas forcément une playlist, ce peut être une simple musique
-- Il se peut que le téléchargement de l'audio marche sur d'autres sites que Youtube, mais il faut trouver le bon url
+- Il se peut que le téléchargement de l'audio marche sur d'autres sites que Youtube, pour cela aller voir sur le [dépôt de youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
