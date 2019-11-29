@@ -113,4 +113,5 @@ Cela enlèvera toute occurence des expressions *"(audio)"*, *"lyrics"* et *"live
 
 ### Contact
 Pour rapporter un bug ou tout commentaire, vous pouvez me joindre sur:
-- Mastodon: 
+- Mastodon: rafutek@mamot.fr
+- Diaspora*: rafutek@framasphere.org
