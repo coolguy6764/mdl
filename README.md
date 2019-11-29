@@ -104,7 +104,7 @@ Musique
 
 Cela enlèvera toute occurence des expressions *"(audio)"*, *"lyrics"* et *"live"*, **sans être sensible à la casse**.
 
-*Note: Par défaut seules les expressions* " - " *sont enlevées (en général pour séparer l'artiste du titre).*
+*Note: Par défaut seule l'expression* " - " *est enlevée (en général utilisée pour séparer l'artiste du titre).*
 
 
 ### Notes
