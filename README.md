@@ -103,7 +103,8 @@ Musique
 `downloadmp3 -u URL -r "(audio)/lyrics/live"`
 
 Cela enlèvera toute occurence des expressions *"(audio)"*, *"lyrics"* et *"live"*, **sans être sensible à la casse**.
-Par défaut seules les expressions *" - "* sont enlevées (en général pour séparer l'artiste du titre).
+
+*Note: Par défaut seules les expressions* " - " *sont enlevées (en général pour séparer l'artiste du titre).*
 
 
 ### Notes
