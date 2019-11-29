@@ -1,3 +1,5 @@
+#----------------------------------------------------------------------------------------
+
 # Script qui télécharge l'audio d'une ou plusieurs vidéos en format mp3
 # selon l'aborescence:
 #	Dossier
@@ -5,10 +7,11 @@
 #	    └── Album
 #	        └── titre1.mp3
 #	        └── ... 
-# Une image est requise et sera intégrée au(x) mp3 comme pochette d'album
 
-# Plusieurs options permettent d'entrer des informations supplémentaires comme 
-# le nom d'artiste, d'album, le genre et la date
+# Plusieurs options permettent d'entrer des informations supplémentaires 
+# aux fichiers mp3 comme le nom d'artiste, d'album, le genre et la date
+
+# Une image peut intégrée au(x) mp3 comme pochette d'album
 
 # Enlever certaines expressions des titres est aussi faisable
 
@@ -17,7 +20,9 @@
 #	youtube-dl (téléchargement des mp3)
 #	ffmpeg (inclusion de l'image aux mp3)
 #	mid3v2 (inclusion d'informations supplémentaires: album, artiste, année, etc.. )
-# Veiller à les installer avant toute chose
+
+# Le script install.sh les installe s'ils ne sont pas présents,
+# et peuvent être désinstallés avec uninstall.sh
 
 
 ###---------------------------------------------------------------------------------------
@@ -58,7 +63,7 @@ error() {
 }
 
 usage() {
-	echo "Usage: $(basename ${0}) -i /absolute/path/image -u URL [OPTIONS]"
+	echo "Usage: $(basename ${0}) -u URL [OPTIONS]"
 }
 
 exit_abnormal(){
@@ -131,7 +136,7 @@ done
 
 #----------------------------------Make some verifications and modifications if needed
 
-if [ "${URL}" = "" ] || [ "${IMG}" = "" ]; then
+if [ "${URL}" = "" ]; then
 	exit_abnormal
 fi
 
@@ -247,8 +252,13 @@ rn_info() {
 		else
 			mv "${entry}" "${src}"
 		fi
-
-		ffmpeg -hide_banner -i ${src} -i "${IMG}" -map_metadata 0 -map 0 -map 1 ${dest}
+		
+		if [ "${IMG}" != "" ]; then
+			ffmpeg -hide_banner -i ${src} -i "${IMG}" -map_metadata 0 -map 0 -map 1 ${dest}
+		else
+			mv "${src}" "${dest}"
+		fi
+		
 		rm -f ${src}
 		i=$((i+1))
 		mid3v2 -t "${newname%.mp3*}" -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${i}" ${dest}
