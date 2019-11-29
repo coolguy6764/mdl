@@ -41,19 +41,26 @@ dossier
         └── ...       
 ```
 
-- **Mode normal:**
+- **Mode normal**
 
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -a "Artiste" -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
-- **Mode extract:**
-
-`downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
+- **Mode extract**
 
 A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musique"*
 
+`downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
+
+### Etapes
+1. Choisir une playlist ou une musique sur Youtube
+2. Télécharger une image de couverture de l'album si besoin
+3. Ouvrir un terminal **bash**
+5. Lancer le script avec les options choisies en fonction des titres des musiques
+6. Vérifier le téléchargement avec votre lecteur mp3 préféré
+
 ### Exemples
 
-- **minimal:**
+- **minimal**
 
 `downloadmp3 -u URL`
 ```
@@ -64,7 +71,7 @@ A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musiq
         └── ...       
 ```
 
-- **Artiste et Album:**
+- **Artiste et Album**
 
 `downloadmp3 -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" `
 ```
@@ -75,7 +82,7 @@ A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musiq
         └── ...       
 ```
 
-- **Dossier de stockage:**
+- **Dossier de stockage**
 
 `downloadmp3 -u URL -d "/home/user/Musique"`
 ```
@@ -85,26 +92,19 @@ Musique
         └── Georges_Brassens_Les_copains_d´abord.mp3
         └── ...       
 ```
-Le script intègre des informations à chaque fichier mp3, en plus de l'image.
-- **Artiste, Album, Genre et date:**
+- **Intégrer des informations aux mp3**
 
 `downloadmp3 -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" -g "Chanson française" -y 2019`
 
-Par défaut, l'artiste, l'album et le genre sont *"Inconnu"* et date est *0000*.
+*Note: Par défaut, l'artiste, l'album et le genre sont* "Inconnu" *et date est* 0000.
 
-- **Renseigner des expressions à supprimer:**
+- **Renseigner des expressions à supprimer des titres**
 
 `downloadmp3 -u URL -r "(audio)/lyrics/live"`
 
 Cela enlèvera toute occurence des expressions *"(audio)"*, *"lyrics"* et *"live"*, **sans être sensible à la casse**.
 Par défaut seules les expressions *" - "* sont enlevées (en général pour séparer l'artiste du titre).
 
-### Etapes
-1. Choisir une playlist ou une musique sur Youtube
-2. Télécharger une image de couverture de l'album
-3. Ouvrir un terminal **bash**
-5. Lancer le script avec les options choisies en fonction des titres des musiques
-6. Vérifier le téléchargement avec votre lecteur mp3 préféré
 
 ### Notes
 - L'url n'est pas forcément une playlist, ce peut être une simple musique
