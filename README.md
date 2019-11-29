@@ -60,7 +60,7 @@ A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musiq
 
 ### Exemples
 
-- **minimal**
+- **Minimal**
 
 `downloadmp3 -u URL`
 ```
