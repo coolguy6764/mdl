@@ -15,13 +15,13 @@ Enfin, on peut choisir d'extraire directement le nom de l'artiste si le titre es
 
 Ouvrir un terminal **bash** et se placer dans le dossier téléchargé, installer *downloadmp3* avec:
 ```bash
-sudo ./install.sh
+./install.sh
 ```
 *downloadmp3* utlise les paquets *youtube-dl*, *ffmpeg* et *mid3v2*, donc s'ils ne sont pas installés, le script d'installation s'en occupe. 
 
 Pour désinstaller le programme, exécuter:
 ```bash
-sudo ./uninstall.sh
+./uninstall.sh
 ```
 Les paquets *youtube-dl*, *ffmpeg* et *mid3v2* peuvent aussi être désinstallés.
 
