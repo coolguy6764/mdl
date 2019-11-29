@@ -110,3 +110,7 @@ Cela enlèvera toute occurence des expressions *"(audio)"*, *"lyrics"* et *"live
 ### Notes
 - L'url n'est pas forcément une playlist, ce peut être une simple musique
 - Il se peut que le téléchargement de l'audio marche sur d'autres sites que Youtube, pour cela aller voir les sites sur le [dépôt de youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
+
+### Contact
+Pour rapporter un bug ou tout commentaire, vous pouvez me joindre sur:
+- Mastodon: 
