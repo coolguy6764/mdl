@@ -1,9 +1,11 @@
 # DownloadMusic
-Le script *downloadmp3.sh* permet de télécharger l'audio de une ou plusieurs musiques Youtube en format mp3, et d'ajouter une image à ces mp3. 
+Le script *downloadmp3.sh* télécharge l'audio de une ou plusieurs musiques Youtube en format mp3 et les place dans des dossiers selon une certaine arborescence (Artiste/Album/).
+
+Optionnellement, il permet d'ajouter une image de couverture à ces musiques, qui sera visible selon votre lecteur mp3. 
 
 De plus, il est possible de renseigner d'autres informations aux musiques téléchargées comme l'album et l'artiste (utile à la création de l'arborescence), le genre ou encore la date.
 
-*downloadmp3.sh* intègre de façon automatique le titre de(s) musique(s) comme titre de(s) mp3(s), mais parfois le titre contient des expressions inutiles, qui peuvent être supprimées.
+*downloadmp3.sh* intègre de façon automatique le titre des musiques comme titre des mp3, mais parfois le titre contient des expressions inutiles, qui peuvent être supprimées.
 
 Enfin, on peut choisir d'extraire directement le nom de l'artiste si le titre est de la forme *"artiste - titre musique"*.
 
@@ -39,11 +41,11 @@ dossier
         └── ...       
 ```
 
-- Mode normal:
+- **Mode normal:**
 
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -a "Artiste" -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
-- Mode extract:
+- **Mode extract:**
 
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
@@ -51,9 +53,9 @@ A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musiq
 
 ### Exemples
 
-- minimal:
+- **minimal:**
 
-`downloadmp3 -i /chemin/absolu/image -u URL`
+`downloadmp3 -u URL`
 ```
 .
 └── Inconnu
@@ -62,9 +64,9 @@ A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musiq
         └── ...       
 ```
 
-- Artiste et Album:
+- **Artiste et Album:**
 
-`downloadmp3 -i /chemin/absolu/image -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" `
+`downloadmp3 -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" `
 ```
 .
 └── Georges Brassens
@@ -73,9 +75,9 @@ A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musiq
         └── ...       
 ```
 
-- Dossier de stockage:
+- **Dossier de stockage:**
 
-`downloadmp3 -i /chemin/absolu/image -u URL -d "/home/user/Musique"`
+`downloadmp3 -u URL -d "/home/user/Musique"`
 ```
 Musique
 └── Inconnu
@@ -84,15 +86,15 @@ Musique
         └── ...       
 ```
 Le script intègre des informations à chaque fichier mp3, en plus de l'image.
-- Artiste, Album, Genre et date:
+- **Artiste, Album, Genre et date:**
 
-`downloadmp3 -i /chemin/absolu/image -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" -g "Chanson française" -y 2019`
+`downloadmp3 -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" -g "Chanson française" -y 2019`
 
 Par défaut, l'artiste, l'album et le genre sont *"Inconnu"* et date est *0000*.
 
-- Renseigner des expressions à supprimer:
+- **Renseigner des expressions à supprimer:**
 
-`downloadmp3 -i /chemin/absolu/image -u URL -r "(audio)/lyrics/live"`
+`downloadmp3 -u URL -r "(audio)/lyrics/live"`
 
 Cela enlèvera toute occurence des expressions *"(audio)"*, *"lyrics"* et *"live"*, **sans être sensible à la casse**.
 Par défaut seules les expressions *" - "* sont enlevées (en général pour séparer l'artiste du titre).
