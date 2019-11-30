@@ -1,5 +1,5 @@
 # DownloadMusic
-Le script *downloadmp3.sh* télécharge l'audio de une ou plusieurs musiques Youtube en format mp3 et les place dans des dossiers selon une certaine arborescence (Artiste/Album/).
+Le script *downloadmp3.sh* télécharge l'audio de une ou plusieurs musiques Youtube, SoundCloud et autres, en format mp3 et les place dans des dossiers selon une certaine arborescence (Artiste/Album/).
 
 Optionnellement, il permet d'ajouter une image de couverture à ces musiques, qui sera visible selon votre lecteur mp3. 
 
@@ -47,7 +47,7 @@ dossier
 
 - **Mode extract**
 
-A utiliser si le titre des musiques Youtube ressemble à *"artiste - titre musique"*
+A utiliser si le titre des musiques ressemble à *"artiste - titre musique"*
 
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
@@ -109,4 +109,10 @@ Cela enlèvera toute occurence des expressions *"(audio)"*, *"lyrics"* et *"live
 
 ### Notes
 - L'url n'est pas forcément une playlist, ce peut être une simple musique
-- Il se peut que le téléchargement de l'audio marche sur d'autres sites que Youtube, pour cela aller voir les sites sur le [dépôt de youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
+- Pour voir les différents sites supportés voir le [dépôt de youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
+
+### Contact
+Pour rapporter un bug ou tout commentaire, vous pouvez me joindre par:
+- Mastodon: rafutek@mamot.fr
+- Diaspora*: rafutek@framasphere.org
+- Mail: rafutek@protonmail.com
