@@ -30,6 +30,7 @@ install_mid3v2="apt-get install python-mutagen"
 
 echo -e "\nCheck for youtube-dl..."
 missing_do_ youtube-dl "${install_ydl}"
+youtube-dl -U
 
 echo -e "\nCheck for ffmpeg..."
 missing_do_ ffmpeg "${install_ffmpeg}"

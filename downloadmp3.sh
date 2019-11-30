@@ -151,6 +151,13 @@ verif_package "youtube-dl"
 verif_package "ffmpeg"
 verif_package "mid3v2"
 
+
+msg=$(youtube-dl -U)
+if [[ "${msg}" == *"ERROR"* ]]; then
+	error "youtube-dl must be updated with install.sh,
+or with the command : youtube-dl -U "
+fi
+
 if [ "${DEST}" = "" ] ; then
 	DEST="$(pwd)"
 fi
