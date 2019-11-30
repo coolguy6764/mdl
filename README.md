@@ -1,5 +1,5 @@
 # DownloadMusic
-Le script *downloadmp3.sh* télécharge l'audio de une ou plusieurs musiques Youtube, SoundCloud et autres, en format mp3 et les place dans des dossiers selon une certaine arborescence (Artiste/Album/).
+Le script *downloadmp3.sh* télécharge l'audio de une ou plusieurs musiques Youtube, SoundCloud et autres, en format mp3 et les place dans des dossiers selon une certaine arborescence.
 
 Optionnellement, il permet d'ajouter une image de couverture à ces musiques, qui sera visible selon votre lecteur mp3. 
 
@@ -7,7 +7,7 @@ De plus, il est possible de renseigner d'autres informations aux musiques télé
 
 *downloadmp3.sh* intègre de façon automatique le titre des musiques comme titre des mp3, mais parfois le titre contient des expressions inutiles, qui peuvent être supprimées.
 
-Enfin, on peut choisir d'extraire directement le nom de l'artiste si le titre est de la forme *"artiste - titre musique"*.
+On peut aussi choisir d'extraire directement le nom de l'artiste si le titre est de la forme *"artiste - titre musique"*.
 
 ### Installation
 
@@ -15,13 +15,13 @@ Enfin, on peut choisir d'extraire directement le nom de l'artiste si le titre es
 
 Ouvrir un terminal **bash** et se placer dans le dossier téléchargé, installer *downloadmp3* avec:
 ```bash
-./install.sh
+sudo ./install.sh
 ```
 *downloadmp3* utlise les paquets *youtube-dl*, *ffmpeg* et *mid3v2*, donc s'ils ne sont pas installés, le script d'installation s'en occupe. 
 
 Pour désinstaller le programme, exécuter:
 ```bash
-./uninstall.sh
+sudo ./uninstall.sh
 ```
 Les paquets *youtube-dl*, *ffmpeg* et *mid3v2* peuvent aussi être désinstallés.
 
@@ -52,7 +52,7 @@ A utiliser si le titre des musiques ressemble à *"artiste - titre musique"*
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
 ### Etapes
-1. Choisir une playlist ou une musique sur Youtube
+1. Choisir une playlist ou une musique sur un [site géré par youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
 2. Télécharger une image de couverture de l'album si besoin
 3. Ouvrir un terminal **bash**
 5. Lancer le script avec les options choisies en fonction des titres des musiques
@@ -106,10 +106,6 @@ Cela enlèvera toute occurence des expressions *"(audio)"*, *"lyrics"* et *"live
 
 *Note: Par défaut seule l'expression* " - " *est enlevée (en général utilisée pour séparer l'artiste du titre).*
 
-
-### Notes
-- L'url n'est pas forcément une playlist, ce peut être une simple musique
-- Pour voir les différents sites supportés voir le [dépôt de youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
 
 ### Contact
 Pour rapporter un bug ou tout commentaire, vous pouvez me joindre par:
