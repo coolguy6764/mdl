@@ -85,7 +85,7 @@ To be used if the music title has the pattern *"artist - music title"*
         └── ...       
 ```
 
-- **Dossier de stockage**
+- **Download folder**
 
 `downloadmp3 -u URL -d "/home/user/Music"`
 ```
