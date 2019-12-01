@@ -52,16 +52,16 @@ folder
 
 To be used if the music title has the pattern *"artist - music title"*
 
-`downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
+`downloadmp3 -i /absolute/path/image -u URL -d /absolute/path/folder -e -A "Album" -g "Genre" -y year -r "expr1/expr2/.../exprN"`
 
-### Etapes
-1. Choisir une playlist ou une musique sur un [site géré par youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
-2. Télécharger une image de couverture de l'album si besoin
-3. Ouvrir un terminal **bash**
-5. Lancer le script avec les options choisies en fonction des titres des musiques
-6. Vérifier le téléchargement avec votre lecteur mp3 préféré
+### Steps
+1. Choose a playlist or a music on one of the [websites managed by youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
+2. Download a cover image if needed
+3. Open a **bash** teminal
+4. Lauch the script with option choosen in funciton of the music titles
+5. Check the result with your favorite music player
 
-### Exemples
+### Examples
 
 - **Minimal**
 
@@ -74,44 +74,44 @@ To be used if the music title has the pattern *"artist - music title"*
         └── ...       
 ```
 
-- **Artiste et Album**
+- **Artist and Album**
 
-`downloadmp3 -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" `
+`downloadmp3 -u URL -a "Georges Brassens" -A "The Best of Brassens" `
 ```
 .
 └── Georges Brassens
-    └── Le meilleur de Brassens
+    └── The Best of Brassens
         └── Georges_Brassens_Les_copains_d´abord.mp3
         └── ...       
 ```
 
 - **Dossier de stockage**
 
-`downloadmp3 -u URL -d "/home/user/Musique"`
+`downloadmp3 -u URL -d "/home/user/Music"`
 ```
-Musique
+Music
 └── Inconnu
     └── Inconnu
         └── Georges_Brassens_Les_copains_d´abord.mp3
         └── ...       
 ```
-- **Intégrer des informations aux mp3**
+- **Integrate information to the mp3**
 
-`downloadmp3 -u URL -a "Georges Brassens" -A "Le meilleur de Brassens" -g "Chanson française" -y 2019`
+`downloadmp3 -u URL -a "Georges Brassens" -A "The Best of Brassens" -g "French Music" -y 2019`
 
-*Note: Par défaut, l'artiste, l'album et le genre sont* "Inconnu" *et date est* 0000.
+*Note: By default, the artist, album and genre are* "Inconnu" *and the year is* 0000.
 
-- **Renseigner des expressions à supprimer des titres**
+- **Indicate expressions to remove from titles**
 
 `downloadmp3 -u URL -r "(audio)/lyrics/live"`
 
-Cela enlèvera toute occurence des expressions *"(audio)"*, *"lyrics"* et *"live"*, **sans être sensible à la casse**.
+This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, **with unsensitive case**.
 
-*Note: Par défaut seule l'expression* " - " *est enlevée (en général utilisée pour séparer l'artiste du titre).*
+*Note: By default, only the expression* " - " *is removed (generally used to separate the artist from the music name).*
 
 
 ### Contact
-Pour rapporter un bug ou tout commentaire, vous pouvez me joindre par:
+To report a bug or a comment, you can join me at:
 - Mastodon: rafutek@mamot.fr
 - Diaspora*: rafutek@framasphere.org
 - Mail: rafutek@protonmail.com
