@@ -1,6 +1,6 @@
 # DownloadMusic
 
-[Here](https://framagit.org/rafu/DownloadMusic/wikis/fr) is the french version of this README.
+*[Here](https://framagit.org/rafu/DownloadMusic/wikis/fr) is the french version.*
 
 The script *downloadmp3.sh* downloads one ore more musics from Youtube, SoundCloud or other websites, in mp3 format, and place them in a certain folder arborescence.
 
