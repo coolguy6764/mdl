@@ -1,53 +1,56 @@
 # DownloadMusic
-Le script *downloadmp3.sh* télécharge l'audio de une ou plusieurs musiques Youtube, SoundCloud et autres, en format mp3 et les place dans des dossiers selon une certaine arborescence.
 
-Optionnellement, il permet d'ajouter une image de couverture à ces musiques, qui sera visible selon votre lecteur mp3. 
+[Here](https://framagit.org/rafu/DownloadMusic/wikis/fr) is the french version of this README.
 
-De plus, il est possible de renseigner d'autres informations aux musiques téléchargées comme l'album et l'artiste (utile à la création de l'arborescence), le genre ou encore la date.
+The script *downloadmp3.sh* downloads one ore more musics from Youtube, SoundCloud or other websites, in mp3 format, and place them in a certain folder arborescence.
 
-*downloadmp3.sh* intègre de façon automatique le titre des musiques comme titre des mp3, mais parfois le titre contient des expressions inutiles, qui peuvent être supprimées.
+Optionnaly, it allows adding a cover image to those musics, that will be displayed by your mp3 player.
 
-On peut aussi choisir d'extraire directement le nom de l'artiste si le titre est de la forme *"artiste - titre musique"*.
+Moreover, it is possible to integrate some informations like album and artist names (used for the folder arborescence), genre and year.
 
-### Installation
+*downloadmp3.sh* automatically sets the music title as the mp3 title, but sometimes it can contain useless expressions, that can be removed with an option.
 
-**L'exécution des scripts doit se faire dans un shell bash**
+We can also choose to directly extract the artist name from the music title when its pattern is *"artist - music title"*.
 
-Ouvrir un terminal **bash** et se placer dans le dossier téléchargé, installer *downloadmp3* avec:
+### Install
+
+**The execution of scripts must be done in a bash shell**
+
+Open a **bash** terminal, go to the downloaded folder and install *downloadmp3* with:
 ```bash
 sudo ./install.sh
 ```
-*downloadmp3* utlise les paquets *youtube-dl*, *ffmpeg* et *mid3v2*, donc s'ils ne sont pas installés, le script d'installation s'en occupe. 
+*downloadmp3* uses *youtube-dl*, *ffmpeg* et *mid3v2*, so if they are not installed, the installation script will manage it. 
 
-Pour désinstaller le programme, exécuter:
+To uninstall the program, execute:
 ```bash
 sudo ./uninstall.sh
 ```
-Les paquets *youtube-dl*, *ffmpeg* et *mid3v2* peuvent aussi être désinstallés.
+*youtube-dl*, *ffmpeg* et *mid3v2* can also be uninstalled.
 
-Pour vérifier l'installation, afficher l'aide avec:
+To verify the installation, display the help message with:
 ```bash
 downloadmp3 -h
 ```
 
-### Utilisation
+### Use
 
-Le script stocke les musiques téléchargées et traitées de cette manière:
+The script saves the musics downloaded as below:
 ```
-dossier
-└── Artiste
+folder
+└── Artist
     └── Album
-        └── titre1.mp3
+        └── title1.mp3
         └── ...       
 ```
 
-- **Mode normal**
+- **Normal mode**
 
-`downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -a "Artiste" -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
+`downloadmp3 -i /absolute/path/image -u URL -d /absolute/path/folder -a "Artist" -A "Album" -g "Genre" -y year -r "expr1/expr2/.../exprN"`
 
-- **Mode extract**
+- **Extract mode**
 
-A utiliser si le titre des musiques ressemble à *"artiste - titre musique"*
+To be used if the music title has the pattern *"artist - music title"*
 
 `downloadmp3 -i /chemin/absolu/image -u URL -d /chemin/absolu/dossier -e -A "Album" -g "Genre" -y année -r "expr1/expr2/.../exprN"`
 
