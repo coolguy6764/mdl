@@ -38,6 +38,7 @@ Options:
 	-h		Print this help text and exit
 	-i /absolute/path/to/image
 			Set the cover image
+	-I		Extract the image from the website (not compatible with -i)
 	-u		Indicate the music/playlist address
 	-e 		Extract the artist name (use it if music title is \"artist - song\")
 	-a \"Artist\"	Set the artist name (not compatible with -e)
@@ -82,7 +83,8 @@ DEST=""
 ALL_EXPR=""
 
 artopt="0"
-while getopts ":hea:A:g:y:i:d:u:r:" options; do
+imgopt="0"
+while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
 	case "${options}" in
 		h)
 			help
@@ -116,7 +118,22 @@ while getopts ":hea:A:g:y:i:d:u:r:" options; do
 			YEAR=${OPTARG}
 			;;
 		i)
+			if [ "${imgopt}" = "0" ];then
+				imgopt="i"
+			else
+
+				error "options ${options} and ${imgopt} are not callable simultaneously"
+			fi
 			IMG=${OPTARG}
+			;;
+		I)
+			if [ "${imgopt}" = "0" ];then
+				imgopt="I"
+			else
+
+				error "options ${options} and ${imgopt} are not callable simultaneously"
+			fi
+			IMG=1
 			;;
 		d)
 			DEST=${OPTARG}
@@ -225,7 +242,11 @@ del_mp3() {
 dl() {
 	###--------------------------------------------------Download mp3 file(s)
 	echo -e "\nStart downloading music from url..."
-	youtube-dl -i -x --audio-format mp3 ${URL} -o '%(title)s.mp3'
+	YOPT=""
+	if [ ${IMG} = 1 ]; then
+		YOPT="--embed-thumbnail"
+	fi
+	youtube-dl -i -x --audio-format mp3 ${YOPT} ${URL} -o '%(title)s.mp3'
 }
 
 
@@ -260,7 +281,7 @@ rn_info() {
 			mv "${entry}" "${src}"
 		fi
 		
-		if [ "${IMG}" != "" ]; then
+		if [ "${IMG}" != "" ] && [ ${IMG} != 1 ]; then
 			ffmpeg -hide_banner -i ${src} -i "${IMG}" -map_metadata 0 -map 0 -map 1 ${dest}
 		else
 			mv "${src}" "${dest}"
