@@ -25,7 +25,7 @@
 #
 # The script install.sh install those that are not present,
 # and can be uninstalled with uninstall.sh.
-###---------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------
 
 #!/bin/bash
 
@@ -41,7 +41,7 @@ Options:
 	-I		Extract the image from the website (not compatible with -i)
 	-u		Indicate the music/playlist address
 	-e 		Extract the artist name (use it if music title is \"artist - song\")
-	-a \"Artist\"	Set the artist name (not compatible with -e)
+	-a \"Artist\"	Set the artist name
 	-A \"Album\"	Set the album name
 	-g \"Genre\"	Set the genre name
 	-y XXXX		Set the year
@@ -92,6 +92,7 @@ sim_call() {
 #-----------------------Get options
 
 ARTIST=""
+ARTIST2=""
 ALBUM=""
 GENRE=""
 YEAR=""
@@ -108,20 +109,15 @@ while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
 			exit 0
 			;;
 		e)
-			if [ "${artopt}" = "0" ];then
-				artopt="e"
-			else
-				sim_call ${options} ${artopt}
-			fi
+			[ "${artopt}" = "0" ] && artopt="e"
 			;;
 		a)
 			if [ "${artopt}" = "0" ];then
 				artopt="a"
 				ARTIST=${OPTARG}
 			else
-				sim_call ${options} ${artopt}
+				ARTIST2=${OPTARG}
 			fi
-			ARTIST=${OPTARG}
 			;;
 		A)
 			ALBUM=${OPTARG}
@@ -166,9 +162,8 @@ done
 
 #----------------------------------Make some verifications and modifications if needed
 
-if [ "${URL}" = "" ]; then
-	exit_abnormal
-fi
+[ "${URL}" = "" ] && exit_abnormal
+
 
 verif_package(){
 	hash ${1}
@@ -183,26 +178,14 @@ verif_package "mid3v2"
 
 
 msg=$(youtube-dl -U)
-if [[ "${msg}" == *"ERROR"* ]]; then
-	error "youtube-dl must be updated with install.sh,
+[[ "${msg}" == *"ERROR"* ]] && error "youtube-dl must be updated with install.sh,
 or with the command : youtube-dl -U "
-fi
 
-if [ "${DEST}" = "" ] ; then
-	DEST="$(pwd)"
-fi
-if [ "${ARTIST}" = "" ] ; then
-	ARTIST="Inconnu"
-fi
-if [ "${ALBUM}" = "" ] ; then
-	ALBUM="Inconnu"
-fi
-if [ "${GENRE}" = "" ] ; then
-	GENRE="Inconnu"
-fi
-if [ "${YEAR}" = "" ] ; then
-	YEAR="0000"
-fi
+[ "${DEST}" = "" ] && DEST="$(pwd)"
+[ "${ARTIST}" = "" ] &&	ARTIST="Inconnu"
+[ "${ALBUM}" = "" ] && ALBUM="Inconnu"
+[ "${GENRE}" = "" ] && GENRE="Inconnu"
+[ "${YEAR}" = "" ] && YEAR="0000"
 
 #----------------------------------Create array of expressions to remove from files
 if [ "${ALL_EXP}" = "" ] ; then
@@ -235,7 +218,7 @@ arbor() {
 }
 
 del_mp3() {
-	###-------------------------------------------Delete mp3
+	#-------------------------------------------Delete mp3
 	if [ $(ls -1 *.mp3 | wc -l) -ne 0 ]; then
 		ls -lh *.mp3 
 		read -n1 -p "The program is going to remove all mp3 files in \"${DEST}/${tree}\" before downloading, are you sure ? (y/n) : " input 
@@ -253,12 +236,10 @@ del_mp3() {
 }
 
 dl() {
-	###--------------------------------------------------Download mp3 file(s)
+	#--------------------------------------------------Download mp3 file(s)
 	echo -e "\nStart downloading music from url..."
 	YOPT=""
-	if [ ${IMG} = 1 ]; then
-		YOPT="--embed-thumbnail"
-	fi
+	[[ ${IMG} == 1 ]] && YOPT="--embed-thumbnail"
 	youtube-dl -i -x --audio-format mp3 ${YOPT} ${URL} -o '%(title)s.mp3'
 }
 
@@ -271,14 +252,20 @@ rn_info() {
 		newname="${entry}"
 		for exp in "${exparray[@]}"
 		do
-			if [ ${#exp} -gt 0 ]; then
-				newname=$( echo "${newname}" | sed "s/${exp}//gI" )
-			fi
+			[ ${#exp} -gt 0 ] && newname=$( echo "${newname}" | sed "s/${exp}//gI" )
 		done
 
 		if [ "${artopt}" = "e" ];then
-			ARTIST=${newname%% - *}
-			newname=${newname#* - }
+			case "${newname}" in
+				*" - "*) 
+					ARTIST=${newname%% - *}
+					newname=${newname#* - }
+					;;
+				*)
+					[ "${ARTIST2}" != "" ] && ARTIST=${ARTIST2}
+					echo "No artist to extract, using ${ARTIST}"
+					;;
+			esac
 			arbor
 		fi
 		
@@ -310,9 +297,7 @@ rn_info() {
 		i=$((i+1))
 		mid3v2 -t "${newname}" -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${i}" ${dest}
 	
-		if [ "${artopt}" = "e" ];then
-			cd ${DEST}
-		fi
+		[ "${artopt}" = "e" ] && cd ${DEST}
 	done
 }
 
