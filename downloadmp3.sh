@@ -1,30 +1,30 @@
 #----------------------------------------------------------------------------------------
-
-# Script qui télécharge l'audio d'une ou plusieurs vidéos en format mp3
-# selon l'aborescence:
-#	Dossier
-#	└── Artiste
+#  _
+# |_||aphaël
+# | \\oy
+# Git repo: https://framagit.org/linur
+#
+# Script to download music from YouTube, SoundCloud and other websites.
+# It store them as below:
+#	Folder
+#	└── Artist
 #	    └── Album
-#	        └── titre1.mp3
+#	        └── title1.mp3
 #	        └── ... 
-
-# Plusieurs options permettent d'entrer des informations supplémentaires 
-# aux fichiers mp3 comme le nom d'artiste, d'album, le genre et la date
-
-# Une image peut intégrée au(x) mp3 comme pochette d'album
-
-# Enlever certaines expressions des titres est aussi faisable
-
-# /!\ Attention /!\ 
-# Les paquets utilisés sont:
-#	youtube-dl (téléchargement des mp3)
-#	ffmpeg (inclusion de l'image aux mp3)
-#	mid3v2 (inclusion d'informations supplémentaires: album, artiste, année, etc.. )
-
-# Le script install.sh les installe s'ils ne sont pas présents,
-# et peuvent être désinstallés avec uninstall.sh
-
-
+# 
+# Some options allow you to add information to the musics,
+# like artist name, album name, genre and date.
+# An image can also be integrated to the music like an album cover.
+# Moreover removing expressions is doable.
+#
+# /!\ Warning /!\
+# The used packages are:
+#	youtube-dl (audio download)
+#	ffmpeg (image integration)
+#	mid3v2 (add information: album, artist, genre, year)
+#
+# The script install.sh install those that are not present,
+# and can be uninstalled with uninstall.sh.
 ###---------------------------------------------------------------------------------------
 
 #!/bin/bash
