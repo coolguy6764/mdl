@@ -271,8 +271,14 @@ rn_info() {
 		
 		
 		newname=$( echo "${newname}" | sed "s/ - //g" )
-		dest=$( echo "${newname}" | sed "s/ /_/g" )
+		dest=$( echo "${newname}" | sed "s/ //g; s/_//g" )
+		newname=$(echo ${newname%.mp3*} | sed "s/_//g")
 		echo -e "\nCreate file: ${dest}"
+		echo "	Title: ${newname}"
+		echo "	Artist: ${ARTIST}"
+		echo "	Album: ${ALBUM}"
+		echo "	Genre: ${GENRE}"
+		echo "	Year: ${YEAR}"
 		src="_${dest}"
 
 		if [ "${artopt}" = "e" ];then
@@ -289,7 +295,7 @@ rn_info() {
 		
 		rm -f ${src}
 		i=$((i+1))
-		mid3v2 -t "${newname%.mp3*}" -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${i}" ${dest}
+		mid3v2 -t "${newname}" -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${i}" ${dest}
 	
 		if [ "${artopt}" = "e" ];then
 			cd ${DEST}
