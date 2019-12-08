@@ -37,7 +37,7 @@ help() {
 Options:
 	-h		Print this help text and exit
 	-i /absolute/path/to/image
-			Set the cover image
+			Set the cover image (not compatible with -I)
 	-I		Extract the image from the website (not compatible with -i)
 	-u		Indicate the music/playlist address
 	-e 		Extract the artist name (use it if music title is \"artist - song\")
@@ -71,6 +71,23 @@ exit_abnormal(){
 	error "$(usage)" 
 }
 
+sim_call() {
+	echo -n "options "
+	i=0
+	max=$(expr ${#} - 1)
+	for arg in ${@}
+	do
+		case ${i} in
+			0) sep="";;
+			${max}) sep=" and ";;
+			*) sep=", ";;
+		esac
+		echo -n "${sep}${arg}"
+		let "i++"
+	done
+	error " are not callable simultaneously"
+}
+
 
 #-----------------------Get options
 
@@ -94,8 +111,7 @@ while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
 			if [ "${artopt}" = "0" ];then
 				artopt="e"
 			else
-
-				error "options ${options} and ${artopt} are not callable simultaneously"
+				sim_call ${options} ${artopt}
 			fi
 			;;
 		a)
@@ -103,8 +119,7 @@ while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
 				artopt="a"
 				ARTIST=${OPTARG}
 			else
-
-				error "options ${options} and ${artopt} are not callable simultaneously"
+				sim_call ${options} ${artopt}
 			fi
 			ARTIST=${OPTARG}
 			;;
@@ -121,8 +136,7 @@ while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
 			if [ "${imgopt}" = "0" ];then
 				imgopt="i"
 			else
-
-				error "options ${options} and ${imgopt} are not callable simultaneously"
+				sim_call ${options} ${imgopt}
 			fi
 			IMG=${OPTARG}
 			;;
@@ -130,8 +144,7 @@ while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
 			if [ "${imgopt}" = "0" ];then
 				imgopt="I"
 			else
-
-				error "options ${options} and ${imgopt} are not callable simultaneously"
+				sim_call ${options} ${imgopt}
 			fi
 			IMG=1
 			;;
