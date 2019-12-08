@@ -1,6 +1,5 @@
 # DownloadMusic
 
-*[Here](https://framagit.org/rafu/DownloadMusic/wikis/fr) is the french version.*
 
 The script *downloadmp3.sh* downloads one ore more musics from Youtube, SoundCloud or other websites, in mp3 format, and place them in a certain folder arborescence.
 
@@ -33,30 +32,9 @@ To verify the installation, display the help message with:
 downloadmp3 -h
 ```
 
-### Use
-
-The script saves the musics downloaded as below:
-```
-folder
-└── Artist
-    └── Album
-        └── title1.mp3
-        └── ...       
-```
-
-- **Normal mode**
-
-`downloadmp3 -i /absolute/path/image -u URL -d /absolute/path/folder -a "Artist" -A "Album" -g "Genre" -y year -r "expr1/expr2/.../exprN"`
-
-- **Extract mode**
-
-To be used if the music title has the pattern *"artist - music title"*
-
-`downloadmp3 -i /absolute/path/image -u URL -d /absolute/path/folder -e -A "Album" -g "Genre" -y year -r "expr1/expr2/.../exprN"`
-
 ### Steps
 1. Choose a playlist or a music on one of the [websites managed by youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
-2. Download a cover image if needed
+2. Download a cover image, if needed
 3. Open a **bash** teminal
 4. Lauch the script with option choosen in funciton of the music titles
 5. Check the result with your favorite music player
@@ -73,6 +51,17 @@ To be used if the music title has the pattern *"artist - music title"*
         └── Georges_Brassens_Les_copains_d´abord.mp3
         └── ...       
 ```
+
+- **Image**
+
+To add a previously downloaded image as cover:
+
+`downloadmp3 -u URL -i /absolute/path/image `
+
+To extract the image from the website:
+
+`downloadmp3 -u URL -I `
+
 
 - **Artist and Album**
 
@@ -114,4 +103,4 @@ This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, **with un
 To report a bug or a comment, you can join me at:
 - Mastodon: rafutek@mamot.fr
 - Diaspora*: rafutek@framasphere.org
-- Mail: rafutek@protonmail.com
+- Mail: raphaelroy@tutanota.com
