@@ -9,8 +9,7 @@
 #	Folder
 #	└── Artist
 #	    └── Album
-#	        └── title1.mp3
-#	        └── ... 
+#	        └── title.mp3
 # 
 # Some options allow you to add information to the musics,
 # like artist name, album name, genre and date.
@@ -188,7 +187,7 @@ or with the command : youtube-dl -U "
 [ "${YEAR}" = "" ] && YEAR="0000"
 
 #----------------------------------Create array of expressions to remove from files
-if [ "${ALL_EXP}" = "" ] ; then
+if [ "${ALL_EXPR}" != "" ] ; then
 	exparray=()
 	iterate=true
 	while [ ${iterate} = true ]
@@ -236,16 +235,16 @@ del_mp3() {
 }
 
 dl() {
-	#--------------------------------------------------Download mp3 file(s)
+	#--------------------------------------------Download audio and convert it to mp3
 	echo -e "\nStart downloading music from url..."
 	YOPT=""
 	[[ ${IMG} == 1 ]] && YOPT="--embed-thumbnail"
-	youtube-dl -i -x --audio-format mp3 ${YOPT} ${URL} -o '%(title)s.mp3'
+	youtube-dl -i -x --audio-format mp3 ${YOPT} ${URL} -o '%(title)s.%(ext)s'
 }
 
 
 rn_info() {
-	###---------------------Rename, add cover image and info to mp3 file(s)
+	#------------------------Rename, add cover image and info to mp3 file(s)
 	i=0
 	for entry in *".mp3"
 	do
@@ -288,7 +287,7 @@ rn_info() {
 		fi
 		
 		if [ "${IMG}" != "" ] && [ ${IMG} != 1 ]; then
-			ffmpeg -hide_banner -i ${src} -i "${IMG}" -map_metadata 0 -map 0 -map 1 ${dest}
+			ffmpeg -hide_banner -i ${src} -i "${IMG}" -map 0 -c:a copy -map 1 -c:v copy ${dest}
 		else
 			mv "${src}" "${dest}"
 		fi
