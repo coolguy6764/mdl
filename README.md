@@ -36,7 +36,7 @@ downloadmp3 -h
 1. Choose a playlist or a music on one of the [websites managed by youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
 2. Download a cover image, if needed
 3. Open a **bash** teminal
-4. Lauch the script with option choosen in funciton of the music titles
+4. Lauch the script with option choosen in function of the music titles
 5. Check the result with your favorite music player
 
 ### Examples
