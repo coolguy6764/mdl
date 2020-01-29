@@ -48,7 +48,7 @@ downloadmp3 -h
 .
 └── Inconnu
     └── Inconnu
-        └── Georges_Brassens_Les_copains_d´abord.mp3
+        └── music_title.mp3
         └── ...       
 ```
 
@@ -70,7 +70,7 @@ To extract the image from the website:
 .
 └── Georges Brassens
     └── The Best of Brassens
-        └── Georges_Brassens_Les_copains_d´abord.mp3
+        └── music_title.mp3
         └── ...       
 ```
 
@@ -81,7 +81,7 @@ To extract the image from the website:
 Music
 └── Inconnu
     └── Inconnu
-        └── Georges_Brassens_Les_copains_d´abord.mp3
+        └── music_title.mp3
         └── ...       
 ```
 - **Integrate information to the mp3**
@@ -102,5 +102,4 @@ This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, **with un
 ### Contact
 To report a bug or a comment, you can join me at:
 - Mastodon: rafutek@mamot.fr
-- Diaspora*: rafutek@framasphere.org
 - Mail: raphaelroy@tutanota.com
