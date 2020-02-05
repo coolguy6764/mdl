@@ -39,7 +39,7 @@ echo -e "\nCheck for mid3v2..."
 missing_do_ mid3v2 "${install_mid3v2}"
 
 
-script="downloadmp3"
+script="mp3-dl"
 chmod +x "${script}.sh"
 cp "${script}.sh" "/usr/local/bin/${script}"
 if [ ${?} -eq 0 ];then

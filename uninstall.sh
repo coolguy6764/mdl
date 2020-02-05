@@ -1,4 +1,4 @@
-# Remove the executable downloadmp3 from /usr/local/bin
+# Remove the executable mp3-dl from /usr/local/bin
 # and ask to remove the packages that might have been installed
 
 #!/bin/bash
@@ -52,7 +52,7 @@ if [ ${rem} = true ]; then
 fi
 
 
-script="downloadmp3"
+script="mp3-dl"
 rm -f "/usr/local/bin/${script}"
 if [ ${?} -eq 0 ];then
 	echo "${script} désinstallé"

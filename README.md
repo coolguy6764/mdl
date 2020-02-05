@@ -1,13 +1,13 @@
-# DownloadMusic
+# mp3-dl
 
 
-The script *downloadmp3.sh* downloads one ore more musics from Youtube, SoundCloud or other websites, in mp3 format, and place them in a certain folder arborescence.
+The script *mp3-dl* downloads one ore more musics from Youtube, SoundCloud or other websites, in mp3 format, and place them in a certain folder arborescence.
 
 Optionnaly, it allows adding a cover image to those musics, that will be displayed by your mp3 player.
 
 Moreover, it is possible to integrate some informations like album and artist names (used for the folder arborescence), genre and year.
 
-*downloadmp3.sh* automatically sets the music title as the mp3 title, but sometimes it can contain useless expressions, that can be removed with an option.
+*mp3-dl.sh* automatically sets the music title as the mp3 title, but sometimes it can contain useless expressions, that can be removed with an option.
 
 We can also choose to directly extract the artist name from the music title when its pattern is *"artist - music title"*.
 
@@ -15,11 +15,11 @@ We can also choose to directly extract the artist name from the music title when
 
 **The execution of scripts must be done in a bash shell**
 
-Open a **bash** terminal, go to the downloaded folder and install *downloadmp3* with:
+Open a **bash** terminal, go to the downloaded folder and install *mp3-dl* with:
 ```bash
 sudo ./install.sh
 ```
-*downloadmp3* uses *youtube-dl*, *ffmpeg* et *mid3v2*, so if they are not installed, the installation script will manage it. 
+*mp3-dl* uses *youtube-dl*, *ffmpeg* et *mid3v2*, so if they are not installed, the installation script will manage it. 
 
 To uninstall the program, execute:
 ```bash
@@ -29,7 +29,7 @@ sudo ./uninstall.sh
 
 To verify the installation, display the help message with:
 ```bash
-downloadmp3 -h
+mp3-dl -h
 ```
 
 ### Steps
@@ -43,7 +43,7 @@ downloadmp3 -h
 
 - **Minimal**
 
-`downloadmp3 -u URL`
+`mp3-dl -u URL`
 ```
 .
 └── Inconnu
@@ -56,16 +56,16 @@ downloadmp3 -h
 
 To add a previously downloaded image as cover:
 
-`downloadmp3 -u URL -i /absolute/path/image `
+`mp3-dl -u URL -i /absolute/path/image `
 
 To extract the image from the website:
 
-`downloadmp3 -u URL -I `
+`mp3-dl -u URL -I `
 
 
 - **Artist and Album**
 
-`downloadmp3 -u URL -a "Georges Brassens" -A "The Best of Brassens" `
+`mp3-dl -u URL -a "Georges Brassens" -A "The Best of Brassens" `
 ```
 .
 └── Georges Brassens
@@ -76,7 +76,7 @@ To extract the image from the website:
 
 - **Download folder**
 
-`downloadmp3 -u URL -d "/home/user/Music"`
+`mp3-dl -u URL -d "/home/user/Music"`
 ```
 Music
 └── Inconnu
@@ -86,13 +86,13 @@ Music
 ```
 - **Integrate information to the mp3**
 
-`downloadmp3 -u URL -a "Georges Brassens" -A "The Best of Brassens" -g "French Music" -y 2019`
+`mp3-dl -u URL -a "Georges Brassens" -A "The Best of Brassens" -g "French Music" -y 2019`
 
 *Note: By default, the artist, album and genre are* "Inconnu" *and the year is* 0000.
 
 - **Indicate expressions to remove from titles**
 
-`downloadmp3 -u URL -r "(audio)/lyrics/live"`
+`mp3-dl -u URL -r "(audio)/lyrics/live"`
 
 This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, **with unsensitive case**.
 
