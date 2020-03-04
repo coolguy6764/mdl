@@ -1,59 +1,37 @@
+#!/bin/bash
 # Remove the executable mp3-dl from /usr/local/bin
 # and ask to remove the packages that might have been installed
+# shellcheck source=./utils.sh
+ABS_PATH="$(realpath "$(dirname "${0}")")/"
+. "${ABS_PATH}"utils.sh
 
-#!/bin/bash
+be_root
+trap_signals
 
-error() {
-        echo "${1}" >&2
-        exit 1
-}
-
-trap "error 'uninstall stopped'" 2
-
-rem=false
-ask_rm() {
- 	echo -ne "\n${1} is installed, do you want to remove it? [y/n] : " 
-	read -n1 input
-	echo
-	case ${input} in
-		[yY])
-			rem=true
-			;;
-		*)
-			rem=false
-			;;
-	esac
-}
-
-present_do_() {
-        hash ${1}
-        if [ ${?} -eq 0 ];then
-                shift
-                for cmd in "${@}"
-                do
-                        eval ${cmd}
-                done
-        fi
-}
-
-present_do_ youtube-dl "ask_rm youtube_dl"
-if [ ${rem} = true ]; then
-	find / -name youtube-dl | sudo xargs rm
-fi
-
-present_do_ ffmpeg "ask_rm ffmpeg"
-if [ ${rem} = true ]; then
-	apt-get -y remove ffmpeg 
-fi
-
-present_do_ mid3v2 "ask_rm mid3v2"
-if [ ${rem} = true ]; then
-	apt-get -y remove python-mutagen 
-fi
-
-
+path="/usr/local/bin/"
 script="mp3-dl"
-rm -f "/usr/local/bin/${script}"
-if [ ${?} -eq 0 ];then
-	echo "${script} désinstallé"
+
+OS="$(get_OS)"
+echo "Uninstalling on ${OS} based system..."
+
+rm -f "${path}${script}"
+[ ! -f "${path}${script}" ] && echo "${script} is uninstalled :("
+
+printf "Do you want to remove dependent packages ? [y/n] " 
+read -r choice
+if [ "${choice}" = "y" ]; then
+	echo "Removing dependent packages..."
+	if [ "${OS}" = "${DEBIAN}" ]; then
+		find / -name youtube-dl | sudo xargs rm -f
+		[ "$(is_present "curl")" -eq 0 ] && apt remove curl
+		[ "$(is_present "ffmpeg")" -eq 0 ] && apt remove ffmpeg
+		[ "$(is_present "mid3v2")" -eq 0 ] && apt remove python-mutagen
+	elif [ "${OS}" = "${ARCH}" ]; then
+		[ "$(is_present "youtube-dl")" -eq 0 ] && pacman -R -s youtube-dl
+		[ "$(is_present "ffmpeg")" -eq 0 ] && pacman -R -s ffmpeg
+		[ "$(is_present "mid3v2")" -eq 0 ] && pacman -R -s python-mutagen
+	fi
+	echo "done"
 fi
+
+
