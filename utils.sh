@@ -20,10 +20,8 @@ error() {
 
 get_OS() {
 	OS=""
-	[ "${OS}" = "" ] && [ "$(is_present "pacman")" -eq 0 ] && 
-		OS="${ARCH}"
-	[ "${OS}" = "" ] && [ "$(is_present "apt")" -eq 0 ] && 
-		OS="${DEBIAN}"
+	[ "${OS}" = "" ] && [ "$(is_present "pacman")" -eq 0 ] && OS="${ARCH}"
+	[ "${OS}" = "" ] && [ "$(is_present "apt")" -eq 0 ] && OS="${DEBIAN}"
 	[ "${OS}" = "" ] && error "Sorry, this script works only for Arch and Debian based systems... "
 	echo "${OS}"
 }

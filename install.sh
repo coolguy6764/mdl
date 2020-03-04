@@ -19,13 +19,11 @@ if [ "${OS}" = "${DEBIAN}" ]; then
 	install_mid3v2="apt install python-mutagen"
 
 elif [ "${OS}" = "${ARCH}" ]; then 
-		install_ydl="pacman -Syu && pacman -S --needed youtube-dl"
+	install_ydl="pacman -Syu && pacman -S --needed youtube-dl"
 	install_ffmpeg="pacman -S --needed ffmpeg"
 	install_mid3v2="pacman -S --needed python-mutagen"
 fi
 
-#missing_do_ youtube-dl "echo install ydl"
-#exit
 missing_do_ youtube-dl "${install_ydl}"
 missing_do_ ffmpeg "${install_ffmpeg}"
 missing_do_ mid3v2 "${install_mid3v2}"

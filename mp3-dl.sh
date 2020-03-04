@@ -1,3 +1,4 @@
+#!/bin/bash
 #----------------------------------------------------------------------------------------
 #  _
 # |_||aphaël
@@ -25,10 +26,11 @@
 # The script install.sh install those that are not present,
 # and can be uninstalled with uninstall.sh.
 #----------------------------------------------------------------------------------------
+# shellcheck source=./utils.sh
+ABS_PATH="$(realpath "$(dirname "${0}")")/"
+. "${ABS_PATH}"utils.sh
 
-#!/bin/bash
-
-trap "error 'program killed'" 2
+trap_signals
 
 help() {
 	usage
@@ -55,11 +57,6 @@ Warnings:
 	> Image and url are required
 	> Paths must not contain spaces
 	"
-}
-
-error() {
-	echo "${1}" >&2
-	exit 1
 }
 
 usage() {
