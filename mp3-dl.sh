@@ -1,5 +1,5 @@
 #!/bin/bash
-#----------------------------------------------------------------------------------------
+#---------------------------------------------------------------------
 #  _
 # |_||aphaël
 # | \\oy
@@ -17,18 +17,22 @@
 # An image can also be integrated to the music like an album cover.
 # Moreover removing expressions is doable.
 #
-# /!\ Warning /!\
-# The used packages are:
-#	youtube-dl (audio download)
-#	ffmpeg (image integration)
-#	mid3v2 (add information: album, artist, genre, year)
-#
 # The script install.sh install those that are not present,
 # and can be uninstalled with uninstall.sh.
-#----------------------------------------------------------------------------------------
+#---------------------------------------------------------------------
 # shellcheck source=./utils.sh
-ABS_PATH="$(realpath "$(dirname "${0}")")/"
-. "${ABS_PATH}"utils.sh
+
+BIN_PATH="/usr/local/bin/"
+required() {
+    echo "'${1}' is required. Please run installer script." && exit 1
+}
+
+utils="$(basename "${0}")-utils"
+if [ -f "${BIN_PATH}$utils" ]; then
+     . "${utils}"
+else
+    required "${utils}"
+fi
 
 trap_signals
 
@@ -36,31 +40,24 @@ help() {
 	usage
 	echo "
 Options:
-	-h		Print this help text and exit
-	-i /absolute/path/to/image
-			Set the cover image (not compatible with -I)
-	-I		Extract the image from the website (not compatible with -i)
-	-u		Indicate the music/playlist address
-	-e 		Extract the artist name (use it if music title is \"artist - song\")
-	-a \"Artist\"	Set the artist name
-	-A \"Album\"	Set the album name
-	-g \"Genre\"	Set the genre name
-	-y XXXX		Set the year
-	-d /absolute/path/to/destination/directory/
-			Set the destination directory to create the arborescence and download the mp3 file(s)	
-	-r \"exp1/exp2/[...]/expn\"
-			Indicate the expressions to remove in the video title to create the song name
-			(remove ' - ' by default)
-
-Warnings:
-	> This script must be executed in a bash shell
-	> Image and url are required
-	> Paths must not contain spaces
+	-h          Print this help text and exit
+	-i PATH     Set the absolute path to the cover image (not compatible with -I)
+	-I          Extract the image from the website (not compatible with -i)
+	-u          Indicate the music/playlist address
+	-e          Extract the artist name from the title (title = \"artist - song\")
+	-a \"Artist\"   Set the artist name
+	-A \"Album\"    Set the album name
+	-g \"Genre\"    Set the genre name
+	-y XXXX     Set the year
+	-d DIR      Set the absolute path to the destination directory where to download the music
+	-r \"str\"  Remove expression(s) in the video title to create the song name.
+                    It removes ' - ' by default.
+                        Format: \"str1/str2/[...]/strN\" 
 	"
 }
 
 usage() {
-	echo "Usage: $(basename ${0}) -u URL [OPTIONS]"
+	echo "Usage: $(basename "${0}") -u URL [OPTIONS]"
 }
 
 exit_abnormal(){
@@ -70,8 +67,8 @@ exit_abnormal(){
 sim_call() {
 	echo -n "options "
 	i=0
-	max=$(expr ${#} - 1)
-	for arg in ${@}
+	max=$(( ${#} - 1 ))
+	for arg in "${@}"
 	do
 		case ${i} in
 			0) sep="";;
@@ -79,7 +76,7 @@ sim_call() {
 			*) sep=", ";;
 		esac
 		echo -n "${sep}${arg}"
-		let "i++"
+		(( i++ ))
 	done
 	error " are not callable simultaneously"
 }
@@ -99,60 +96,35 @@ ALL_EXPR=""
 artopt="0"
 imgopt="0"
 while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
-	case "${options}" in
-		h)
-			help
-			exit 0
-			;;
-		e)
-			[ "${artopt}" = "0" ] && artopt="e"
-			;;
-		a)
-			if [ "${artopt}" = "0" ];then
-				artopt="a"
-				ARTIST=${OPTARG}
-			else
-				ARTIST2=${OPTARG}
-			fi
-			;;
-		A)
-			ALBUM=${OPTARG}
-			;;
-		g)
-			GENRE=${OPTARG}
-			;;
-		y)
-			YEAR=${OPTARG}
-			;;
-		i)
-			if [ "${imgopt}" = "0" ];then
-				imgopt="i"
-			else
-				sim_call ${options} ${imgopt}
-			fi
-			IMG=${OPTARG}
-			;;
-		I)
-			if [ "${imgopt}" = "0" ];then
-				imgopt="I"
-			else
-				sim_call ${options} ${imgopt}
-			fi
-			IMG=1
-			;;
-		d)
-			DEST=${OPTARG}
-			;;	
-		u)
-			URL=${OPTARG}
-			;;
-		r)
-			ALL_EXPR=${OPTARG}
-			;;
-		*)
-			exit_abnormal
-			;;
-	esac
+    case "${options}" in
+    h)  help && exit 0 ;;
+    e)  [ "${artopt}" = "0" ] && artopt="e";;
+    a)  if [ "${artopt}" = "0" ];then
+                          artopt="a"
+    	ARTIST=${OPTARG}
+        else
+    	ARTIST2=${OPTARG}
+                      fi;;
+    A)  ALBUM=${OPTARG};;
+    g)  GENRE=${OPTARG};;
+    y)  YEAR=${OPTARG};;
+    i)  if [ "${imgopt}" = "0" ];then
+                          imgopt="i"
+        else
+        	sim_call "${options}" "${imgopt}"
+        fi
+        IMG=${OPTARG};;
+    I)  if [ "${imgopt}" = "0" ];then
+    	imgopt="I"
+        else
+    	sim_call "${options}" "${imgopt}"
+        fi
+        IMG=1;;
+    d)  DEST=${OPTARG};;	
+    u)  URL=${OPTARG};;
+    r)  ALL_EXPR=${OPTARG};;
+    *)  exit_abnormal;;
+    esac
 done
 
 
@@ -168,10 +140,9 @@ verif_package(){
 	fi
 }
 
-verif_package "youtube-dl"
-verif_package "ffmpeg"
-verif_package "mid3v2"
-
+required "youtube-dl"
+required "ffmpeg"
+required "mid3v2"
 
 msg=$(youtube-dl -U)
 [[ "${msg}" == *"ERROR"* ]] && error "youtube-dl must be updated with install.sh, or with the command : youtube-dl -U "

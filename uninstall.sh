@@ -3,7 +3,7 @@
 # and ask to remove the packages that might have been installed
 # shellcheck source=./utils.sh
 ABS_PATH="$(realpath "$(dirname "${0}")")/"
-. "${ABS_PATH}"utils.sh
+. "${ABS_PATH}utils.sh"
 
 be_root
 trap_signals
@@ -14,8 +14,9 @@ script="mp3-dl"
 OS="$(get_OS)"
 echo "Uninstalling on ${OS} based system..."
 
-rm -f "${path}${script}"
-[ ! -f "${path}${script}" ] && echo "${script} is uninstalled :("
+rm -f "${path}${script}" "${BIN_PATH}${script}-utils"
+[ ! -f "${path}${script}" ] && [ ! -f "${BIN_PATH}${script}-utils" ] && 
+    echo "${script} is uninstalled :("
 
 printf "Do you want to remove dependent packages ? [y/n] " 
 read -r choice
