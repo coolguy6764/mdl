@@ -10,8 +10,8 @@ be_root() {
 		exit 1
 }
 
-trap_signals() {
-	trap "error 'Installation stopped'" 2
+ctrl_C() {
+	trap "error '${1}'" 2
 }
 error() {
 	echo "${1}" >&2

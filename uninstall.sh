@@ -6,7 +6,7 @@ ABS_PATH="$(realpath "$(dirname "${0}")")/"
 . "${ABS_PATH}utils.sh"
 
 be_root
-trap_signals
+ctrl_C "Uninstallation killed"
 
 path="/usr/local/bin/"
 script="mp3-dl"

@@ -8,7 +8,7 @@ ABS_PATH="$(realpath "$(dirname "${0}")")/"
 . "${ABS_PATH}utils.sh"
 
 be_root
-trap_signals
+ctrl_C "Installation killed"
 
 OS="$(get_OS)"
 echo "Installing on ${OS} based system..."
