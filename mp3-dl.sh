@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # shellcheck source=./utils.sh
 #---------------------------------------------------------------------
 #  _
@@ -43,7 +43,7 @@ ALBUM=""
 GENRE=""
 YEAR=""
 IMG=""
-DEST=""
+DEST_DIR=""
 ALL_EXPR=""
 
 artopt="0"
@@ -52,15 +52,19 @@ imgopt="0"
 #---------------------------------------------------------------------
 # Functions
 #---------------------------------------------------------------------
+
+# Error function: to call when a package is required
+# Arguments: package required
 required() {
     echo "'${1}' is required. Please run installer script." && exit 1
 }
 
-help() {
-	usage
+# Print usage and options to use
+help_msg() {
+	usage_msg
 	echo "
 Options:
-	-h          Print this help text and exit
+	-h          Print this help_msg text and exit
 	-i PATH     Set the absolute path to the cover image (not compatible with -I)
 	-I          Extract the image from the website (not compatible with -i)
 	-u          Indicate the music/playlist address
@@ -76,16 +80,20 @@ Options:
 	"
 }
 
-usage() {
+# Print script usage
+usage_msg() {
 	echo "Usage: $(basename "${0}") -u URL [OPTIONS]"
 }
 
+# Error function: print usage and exit
 exit_abnormal(){
-	error "$(usage)" 
+	error "$(usage_msg)" 
 }
 
+# Error function: to call when options are not compatible 
+# arguments: options
 sim_call() {
-	echo -n "options "
+	printf "options "
 	i=0
 	max=$(( ${#} - 1 ))
 	for arg in "${@}"
@@ -96,31 +104,20 @@ sim_call() {
 			*)      sep=", ";;
 		esac
 		echo "${sep}${arg}"
-		(( i++ ))
+		i=$((i+1))
 	done
 	error " are not callable simultaneously"
 }
 
 # Create folder arborescence
 arbor() {
-	cd "${DEST}" || error "Can not go to ${DEST}"
+	cd "${DEST_DIR}" || error "Can not go to ${DEST_DIR}"
 	tree="${ARTIST}/${ALBUM}"
 	mkdir -p "${tree}"
 	cd "${tree}" || error "Can not go to ${tree}"
 }
 
-# Ask and delete mp3 in current folder
-#del_mp3() {
-#	if [ "$(find . -maxdepth 1 -name '*.mp3*' | wc -l)" -ne 0 ]; then
-#		ls -lh "*.mp3*" 
-#                question="The program is going to remove all mp3 files in \"${DEST}/${tree}\" before downloading, are you sure ? [y/n]"
-#                printf "%s" "${question}" 
-#		read -r input 
-#		[ "${input}" = "y" ] && echo "Delete all mp3 files in folder..." && rm -f "*.mp3*"
-#	fi
-#}
-
-# Download audio and convert it to mp3
+# Download music as mp3
 download() {
         echo "" && echo "Start downloading music from url..."
         if [ "${IMG}" = "extract-from-web" ]; then
@@ -134,67 +131,92 @@ download() {
 rename_plus_info() {
     music_number=0
     for entry in *".mp3"; do
-        
             newname="${entry}"
-            for exp in "${exparray[@]}"; do
-                [ ${#exp} -gt 0 ] && newname=$( echo "${newname}" | sed "s/${exp}//gI" )
-            done
-
+            
+            # Remove expressions from each music title
+            expressions="${ALL_EXPR}"
+            if [ "${expressions}" != "" ]; then
+                iterate=true
+                while [ ${iterate} = true ]; do
+                    case ${expressions} in
+	            *"/"*)  ;;
+	            *)      iterate=false;;
+	            esac
+        
+                    exp=${expressions##*/}
+	            expressions=${expressions%/*}
+                    [ ${#exp} -gt 0 ] && newname=$( echo "${newname}" | sed "s/${exp}//gI" )
+                done
+            fi
+            
+            # Extract artist from title (if needed)
 	    if [ "${artopt}" = "e" ];then
                 case "${newname}" in
                 *" - "*)    ARTIST=${newname%% - *} && newname=${newname#* - };;
 		*)          [ "${ARTIST2}" != "" ] && echo "No artist to extract, using ${ARTIST2}" && ARTIST=${ARTIST2};;
                 esac
+
+                # Generate arborescence for the artist
 		arbor
 	    fi
-		
+	    
+            # Remove separator and spaces from file name
 	    newname=$( echo "${newname}" | sed "s/ - //g" )
 	    dest=$( echo "${newname}" | sed "s/ //g; s/_//g" )
-	    newname=$(echo ${newname%.mp3*} | sed "s/_//g")
+	    newname=$(echo "${newname%.mp3*}" | sed "s/_//g")
 
-            # Allow to override the output 
+            # Override if music already downloaded 
             if [ -f "${dest}" ] && [ "${entry}" = "${dest}" ]; then
                 rm -f "${entry}"
             else
-                # Rename file
-                echo "" && echo "Create file: ${dest}"
+                # Add cover image (if needed)
+                src="_${dest}"
+                if [ "${artopt}" = "e" ];then    
+                    mv "${DEST_DIR}/${entry}" "${src}"
+                else
+                    mv "${entry}" "${src}"
+                fi
+	    	
+	    	if [ "${IMG}" != "" ] && [ ! "${IMG}" = "extract-from-web" ]; then
+		    ffmpeg -hide_banner -i "${src}" -i "${IMG}" -map 0 -c:a copy -map 1 -c:v copy "${dest}"
+		else
+		    mv "${src}" "${dest}"
+		fi
+		rm -f "${src}"
+
+                # Add music information
+		music_number=$((music_number+1))
+		mid3v2 -t "${newname}" -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${music_number}" "${dest}"
+	
+                echo "" && echo "Created file: ${dest}"
                 echo "	Title: ${newname}"
                 echo "	Artist: ${ARTIST}"
                 echo "	Album: ${ALBUM}"
                 echo "	Genre: ${GENRE}"
                 echo "	Year: ${YEAR}"
-                src="_${dest}"
 
-                if [ "${artopt}" = "e" ];then    
-                    mv "${DEST}/${entry}" "${src}"
-                else
-                    mv "${entry}" "${src}"
-                fi
-	    	
-	    	if [ "${IMG}" != "" ] && [ ${IMG} != "extract-from-web" ]; then
-		    ffmpeg -hide_banner -i "${src}" -i "${IMG}" -map 0 -c:a copy -map 1 -c:v copy "${dest}"
-		else
-		    mv "${src}" "${dest}"
-		fi
-		
-		rm -f "${src}"
-		music_number=$((music_number+1))
-		mid3v2 -t "${newname}" -a "${ARTIST}" -A "${ALBUM}" -g "${GENRE}" -y ${YEAR} -T "${music_number}" "${dest}"
-	
 		if [ "${artopt}" = "e" ]; then
-                    cd "${DEST}" || error "Can not go to ${DEST}"
+                    cd "${DEST_DIR}" || error "Can not go to ${DEST_DIR}"
 	        fi
             fi
     done
 }
 
-
 #---------------------------------------------------------------------
 # Script starts here
 #---------------------------------------------------------------------
+# Check required packages
+missing_do_ youtube-dl "required 'youtube-dl'"
+missing_do_ ffmpeg "required 'ffmpeg'"
+missing_do_ mid3v2 "required 'mid3v2'"
+
+#msg=$(youtube-dl -U)
+#[[ "${msg}" == *"ERROR"* ]] && error "youtube-dl must be updated with with 'youtube-dl -U'"
+
+# Get different options
 while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
     case "${options}" in
-    h)  help && exit 0 ;;
+    h)  help_msg && exit 0 ;;
     e)  [ "${artopt}" = "0" ] && artopt="e";;
     a)  if [ "${artopt}" = "0" ];then
             artopt="a"
@@ -217,53 +239,27 @@ while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
     	    sim_call "${options}" "${imgopt}"
         fi
         IMG="extract-from-web";;
-    d)  DEST=${OPTARG};;	
+    d)  DEST_DIR=${OPTARG};;	
     u)  URL=${OPTARG};;
     r)  ALL_EXPR=${OPTARG};;
     *)  exit_abnormal;;
     esac
 done
 
-# Make some verifications and modifications if needed
+# Check music url 
 [ "${URL}" = "" ] && exit_abnormal
 
-missing_do_ youtube-dl "required 'youtube-dl'"
-missing_do_ ffmpeg "required 'ffmpeg'"
-missing_do_ mid3v2 "required 'mid3v2'"
-
-msg=$(youtube-dl -U)
-[[ "${msg}" == *"ERROR"* ]] && error "youtube-dl must be updated with with 'youtube-dl -U'"
-
-[ "${DEST}" = "" ] && DEST="$(pwd)"
+# Set variables
+[ "${DEST_DIR}" = "" ] && DEST_DIR="$(pwd)"
 [ "${ARTIST}" = "" ] &&	ARTIST="Inconnu"
 [ "${ALBUM}" = "" ] && ALBUM="Inconnu"
 [ "${GENRE}" = "" ] && GENRE="Inconnu"
 [ "${YEAR}" = "" ] && YEAR="0000"
 
-# Create array of expressions to remove from file names
-if [ "${ALL_EXPR}" != "" ] ; then
-	exparray=()
-	iterate=true
-	while [ ${iterate} = true ]
-	do
-		case ${ALL_EXPR} in
-			*"/"*)
-				;;
-			*)
-				iterate=false
-				;;
-		esac
-
-		exp=${ALL_EXPR##*/}
-		ALL_EXPR=${ALL_EXPR%/*}
-		exparray+=("${exp}")
-	done
-fi
-
 # Main program
 case ${artopt} in
 	0 | a)  arbor && download && rename_plus_info;;
-	e)      cd "${DEST}" || error "Can not go to ${DEST}"
+	e)      cd "${DEST_DIR}" || error "Can not go to ${DEST_DIR}"
 		download && rename_plus_info;;
 	esac
 

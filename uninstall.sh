@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Remove the executable mp3-dl from /usr/local/bin
 # and ask to remove the packages that might have been installed
 # shellcheck source=./utils.sh
