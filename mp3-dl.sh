@@ -4,22 +4,9 @@
 #  _
 # |_||aphaël
 # | \\oy
-# Git repo: https://framagit.org/linur
+# Git repo: https://github.com/rafutek
 #
 # Script to download music from YouTube, SoundCloud and other websites.
-# It store them as below:
-#	Folder
-#	└── Artist
-#	    └── Album
-#	        └── title.mp3
-# 
-# Some options allow you to add information to the musics,
-# like artist name, album name, genre and date.
-# An image can also be integrated to the music like an album cover.
-# Moreover removing expressions is doable.
-#
-# The script install.sh install those that are not present,
-# and can be uninstalled with uninstall.sh.
 #---------------------------------------------------------------------
 
 #---------------------------------------------------------------------
@@ -63,26 +50,54 @@ required() {
 help_msg() {
 	usage_msg
 	echo "
-Options:
-	-h          Print this help_msg text and exit
-	-i PATH     Set the absolute path to the cover image (not compatible with -I)
-	-I          Extract the image from the website (not compatible with -i)
-	-u          Indicate the music/playlist address
-	-e          Extract the artist name from the title (title = \"artist - song\")
-	-a \"Artist\"   Set the artist name
-	-A \"Album\"    Set the album name
-	-g \"Genre\"    Set the genre name
-	-y XXXX     Set the year
-	-d DIR      Set the absolute path to the destination directory where to download the music
-	-r \"str\"  Remove expression(s) in the video title to create the song name.
-                    It removes ' - ' by default.
-                        Format: \"str1/str2/[...]/strN\" 
+OPTIONS:
+	-h
+            Print this help message and exit
+
+	-i PATH
+            Set the absolute path to the cover image (not compatible with -I)
+
+	-I
+            Extract the image from the website (not compatible with -i)
+
+	-u
+            Indicate the music/playlist address
+
+	-e
+            Extract the artist name from the title (title = \"artist - song\")
+
+	-a \"Artist\"
+            Set the artist name
+
+	-A \"Album\"
+            Set the album name
+
+	-g \"Genre\"
+            Set the genre name
+
+	-y XXXX
+            Set the year
+
+	-d DIR
+            Set the absolute path to the destination directory where to download the music
+
+	-r \"exp\"
+            Remove expression(s) in the video title to create the song name.
+            Expression \" - \" is removed by default.
+            Format: \"exp1/exp2/[...]/expN\" 
 	"
 }
 
 # Print script usage
 usage_msg() {
-	echo "Usage: $(basename "${0}") -u URL [OPTIONS]"
+	echo "
+USAGE: 
+    $(basename "${0}") -u URL [OPTIONS]
+
+DESCRIPTION: 
+    mp3-dl is a script to download music from the web,
+    store it where you want in a nice folder hierarchy,
+    and add some metadata to the downloaded mp3 file(s)."
 }
 
 # Error function: print usage and exit
@@ -205,13 +220,6 @@ rename_plus_info() {
 #---------------------------------------------------------------------
 # Script starts here
 #---------------------------------------------------------------------
-# Check required packages
-missing_do_ youtube-dl "required 'youtube-dl'"
-missing_do_ ffmpeg "required 'ffmpeg'"
-missing_do_ mid3v2 "required 'mid3v2'"
-
-#msg=$(youtube-dl -U)
-#[[ "${msg}" == *"ERROR"* ]] && error "youtube-dl must be updated with with 'youtube-dl -U'"
 
 # Get different options
 while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
@@ -245,6 +253,15 @@ while getopts ":hea:A:g:y:Ii:d:u:r:" options; do
     *)  exit_abnormal;;
     esac
 done
+
+# Check required packages
+missing_do_ youtube-dl "required 'youtube-dl'"
+missing_do_ ffmpeg "required 'ffmpeg'"
+missing_do_ mid3v2 "required 'mid3v2'"
+
+#msg=$(youtube-dl -U)
+#[[ "${msg}" == *"ERROR"* ]] && error "youtube-dl must be updated with with 'youtube-dl -U'"
+
 
 # Check music url 
 [ "${URL}" = "" ] && exit_abnormal

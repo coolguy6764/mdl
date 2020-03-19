@@ -14,7 +14,7 @@ OS="$(get_OS)"
 echo "Installing on ${OS} based system..."
 if [ "${OS}" = "${DEBIAN}" ]; then
 	install_curl="apt install curl"
-	install_ydl="missing_do_ curl '${install_curl}'&&
+	install_ydl="missing_do_ curl '${install_curl}' &&
 	 curl -L https://yt-dl.org/downloads/latest/youtube-dl -o ${BIN_PATH}youtube-dl &&
 	 chmod a+rx /usr/local/bin/youtube-dl"
 	install_ffmpeg="apt install ffmpeg"

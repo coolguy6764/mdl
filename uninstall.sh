@@ -11,9 +11,6 @@ ctrl_C "Uninstallation killed"
 path="/usr/local/bin/"
 script="mp3-dl"
 
-OS="$(get_OS)"
-echo "Uninstalling on ${OS} based system..."
-
 rm -f "${path}${script}" "${BIN_PATH}${script}-utils"
 [ ! -f "${path}${script}" ] && [ ! -f "${BIN_PATH}${script}-utils" ] && 
     echo "${script} is uninstalled :("
@@ -22,6 +19,10 @@ printf "Do you want to remove dependent packages ? [y/n] "
 read -r choice
 if [ "${choice}" = "y" ]; then
 	echo "Removing dependent packages..."
+
+        OS="$(get_OS)"
+        echo "Uninstalling on ${OS} based system..."
+
 	if [ "${OS}" = "${DEBIAN}" ]; then
 		find / -name youtube-dl | sudo xargs rm -f
 		[ "$(is_present "curl")" -eq 0 ] && apt remove curl
