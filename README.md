@@ -13,13 +13,11 @@ This little program allows you to:
 
 1. Clone or download the repository
 2. Open a terminal, go to the downloaded folder and install *mp3-dl* with `sudo ./install.sh`
-
-*mp3-dl* uses *youtube-dl*, *ffmpeg* et *mid3v2*, so if they are not installed, the script will install them using **apt** or **pacman**.
-
 3. Open a new terminal and check the installation with `mp3-dl -h`
 
+To uninstall the program, execute `sudo ./uninstall.sh`. 
 
-To uninstall the program, execute `sudo ./uninstall.sh`. *youtube-dl*, *ffmpeg* et *mid3v2* can also be uninstalled.
+*Note: youtube-dl, ffmpeg and mid3v2 are required. So if they are not installed, the script will install them using **apt** or **pacman**. They can be removed with the uninstall script.*
 
 
 ### Steps
