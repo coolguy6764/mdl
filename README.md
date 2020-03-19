@@ -13,20 +13,19 @@ This little program allows you to:
 
 - Clone or download the repo
 - Open a terminal, go to the downloaded folder and install *mp3-dl* with:
-```bash
-sudo ./install.sh
-```
+
+`sudo ./install.sh`
+
 *mp3-dl* uses *youtube-dl*, *ffmpeg* et *mid3v2*, so if they are not installed, the script will install them using **apt** or **pacman**.
 
 - Check the installation with:
-```bash
-mp3-dl -h
-```
+
+`mp3-dl -h`
 
 - To uninstall the program, execute:
-```bash
-sudo ./uninstall.sh
-```
+
+`sudo ./uninstall.sh`
+
 *youtube-dl*, *ffmpeg* et *mid3v2* can also be uninstalled.
 
 
@@ -86,7 +85,7 @@ Music
 
 *Note: By default, the artist, album and genre are* "Inconnu" *and the year is* 0000.
 
-- **Indicate expressions to remove from titles**
+- **Remove expressions from titles**
 
 `mp3-dl -u URL -r "(audio)/lyrics/live"`
 
@@ -94,7 +93,7 @@ This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, with unse
 
 *Note: By default, only the expression* " - " *is removed (generally used to separate the artist from the music name).*
 
-- **Extract artist name from titles**
+- **Extract artist from titles**
 
 `mp3-dl -u URL -e`
 
