@@ -1,43 +1,39 @@
 # mp3-dl
 
+Simple script to download music from Youtube, SoundCloud and other websites, in one command.
 
-The script *mp3-dl* downloads one ore more musics from Youtube, SoundCloud or other websites, in mp3 format, and place them in a certain folder arborescence.
-
-Optionnaly, it allows adding a cover image to those musics, that will be displayed by your mp3 player.
-
-Moreover, it is possible to integrate some informations like album and artist names (used for the folder arborescence), genre and year.
-
-*mp3-dl.sh* automatically sets the music title as the mp3 title, but sometimes it can contain useless expressions, that can be removed with an option.
-
-We can also choose to directly extract the artist name from the music title when its pattern is *"artist - music title"*.
+This little program allows you to:
+ - store the music in a structured folder hierarchy 
+ - add a cover image
+ - integrate album, artist, genre and year
+ - remove unwanted expressions from titles
+ - extract artist from music title
 
 ### Install
 
-Open a terminal, go to the downloaded folder and install *mp3-dl* with:
+- Clone or download the repo
+- Open a terminal, go to the downloaded folder and install *mp3-dl* with:
 ```bash
 sudo ./install.sh
 ```
-*mp3-dl* uses *youtube-dl*, *ffmpeg* et *mid3v2*, so if they are not installed, the script will install them. 
+*mp3-dl* uses *youtube-dl*, *ffmpeg* et *mid3v2*, so if they are not installed, the script will install them using **apt** or **pacman**.
 
-*Note: It uses **apt** or **pacman**, depending on your distribution (debian or arch based)*
+- Check the installation with:
+```bash
+mp3-dl -h
+```
 
-To uninstall the program, execute:
+- To uninstall the program, execute:
 ```bash
 sudo ./uninstall.sh
 ```
 *youtube-dl*, *ffmpeg* et *mid3v2* can also be uninstalled.
 
-To check the installation, display the help message with:
-```bash
-mp3-dl -h
-```
 
 ### Steps
 1. Choose a playlist or a music on one of the [websites managed by youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
-2. Download a cover image, if needed
-3. Open a teminal
-4. Lauch the script with option choosen in function of the music titles
-5. Check the result with your favorite music player
+2. Open a teminal and lauch the script with the options and arguments wanted
+3. Check the result with your favorite music player
 
 ### Examples
 
@@ -94,9 +90,15 @@ Music
 
 `mp3-dl -u URL -r "(audio)/lyrics/live"`
 
-This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, **with unsensitive case**.
+This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, with unsensitive case.
 
 *Note: By default, only the expression* " - " *is removed (generally used to separate the artist from the music name).*
+
+- **Extract artist name from titles**
+
+`mp3-dl -u URL -e`
+
+This option is useful when the music titles have the pattern "artist - title". In this case, the program will remove "artist" from the title, integrate it to the mp3 and place the file in the artist directory.
 
 
 ### Contact
