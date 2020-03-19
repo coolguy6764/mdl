@@ -1,6 +1,6 @@
-# mp3-dl
+# About
 
-Simple script to download music from Youtube, SoundCloud and other websites, in one command.
+mp3-dl is a simple script to download music from Youtube, SoundCloud and other websites, in one command.
 
 This little program allows you to:
  - store the music in a structured folder hierarchy 
@@ -12,7 +12,7 @@ This little program allows you to:
 ### Install
 
 1. Clone or download the repository
-2. Open a terminal, go to the downloaded folder and install *mp3-dl* with `sudo ./install.sh`
+2. Open a terminal, go to the downloaded folder and run `sudo ./install.sh`
 3. Open a new terminal and check the installation with `mp3-dl -h`
 
 To uninstall the program, execute `sudo ./uninstall.sh`. 
@@ -38,20 +38,20 @@ To uninstall the program, execute `sudo ./uninstall.sh`.
         └── ...       
 ```
 
-- **Image**
+- **Cover image**
 
 To add a previously downloaded image as cover:
 
 `mp3-dl -u URL -i /absolute/path/image `
 
-To extract the image from the website:
+To extract the cover from the website:
 
 `mp3-dl -u URL -I `
 
 
-- **Artist and Album**
+- **Album and artist**
 
-`mp3-dl -u URL -a "Georges Brassens" -A "The Best of Brassens" `
+`mp3-dl -u URL -A "The Best of Brassens" -a "Georges Brassens"`
 ```
 .
 └── Georges Brassens
@@ -60,7 +60,7 @@ To extract the image from the website:
         └── ...       
 ```
 
-- **Download folder**
+- **Destination folder**
 
 `mp3-dl -u URL -d "/home/user/Music"`
 ```
