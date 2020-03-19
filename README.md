@@ -2,7 +2,7 @@
 
 mp3-dl is a simple script to download music from Youtube, SoundCloud and other websites, in one command.
 
-This little program allows you to:
+It allows you to:
  - store the music in a structured folder hierarchy 
  - add a cover image
  - integrate album, artist, genre and year
