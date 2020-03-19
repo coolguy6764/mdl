@@ -1,4 +1,4 @@
-# About
+## About
 
 mp3-dl is a simple script to download music from Youtube, SoundCloud and other websites, in one command.
 
@@ -9,7 +9,7 @@ It allows you to:
  - remove unwanted expressions from titles
  - extract artist from music title
 
-### Install
+## Install
 
 1. Clone or download the repository
 2. Open a terminal, go to the downloaded folder and run `sudo ./install.sh`
@@ -20,12 +20,14 @@ To uninstall the program, execute `sudo ./uninstall.sh`.
 *Note: youtube-dl, ffmpeg and mid3v2 are required. So if they are not installed, the script will install them using **apt** or **pacman**. They can be removed with the uninstall script.*
 
 
-### Steps
+## Use case
 1. Choose a playlist or a music on one of the [websites managed by youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
-2. Open a teminal and lauch the script with the options and arguments wanted
+2. Open a teminal and launch the script with the options and arguments wanted
 3. Check the result with your favorite music player
 
-### Examples
+## Examples
+
+*Note: Almost every options are compatible, but in these examples I chose to limit the number of options for a better understanding.*
 
 - **Minimal**
 
@@ -91,7 +93,7 @@ This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, with unse
 This option is useful when the music titles have the pattern "artist - title". In this case, the program will remove "artist" from the title, integrate it to the mp3 and place the file in the artist directory.
 
 
-### Contact
+## Contact
 To report a bug or a comment, you can join me at:
 - Mastodon: rafutek@mamot.fr
 - Mail: raphaelroy@tutanota.com
