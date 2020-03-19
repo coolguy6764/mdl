@@ -13,13 +13,13 @@ We can also choose to directly extract the artist name from the music title when
 
 ### Install
 
-**The execution of scripts must be done in a bash shell**
-
-Open a **bash** terminal, go to the downloaded folder and install *mp3-dl* with:
+Open a terminal, go to the downloaded folder and install *mp3-dl* with:
 ```bash
 sudo ./install.sh
 ```
-*mp3-dl* uses *youtube-dl*, *ffmpeg* et *mid3v2*, so if they are not installed, the installation script will manage it. 
+*mp3-dl* uses *youtube-dl*, *ffmpeg* et *mid3v2*, so if they are not installed, the script will install them. 
+
+*Note: It uses **apt** or **pacman**, depending on your distribution (debian or arch based)*
 
 To uninstall the program, execute:
 ```bash
@@ -27,7 +27,7 @@ sudo ./uninstall.sh
 ```
 *youtube-dl*, *ffmpeg* et *mid3v2* can also be uninstalled.
 
-To verify the installation, display the help message with:
+To check the installation, display the help message with:
 ```bash
 mp3-dl -h
 ```
@@ -35,7 +35,7 @@ mp3-dl -h
 ### Steps
 1. Choose a playlist or a music on one of the [websites managed by youtube-dl](https://github.com/ytdl-org/youtube-dl/tree/master/youtube_dl/extractor)
 2. Download a cover image, if needed
-3. Open a **bash** teminal
+3. Open a teminal
 4. Lauch the script with option choosen in function of the music titles
 5. Check the result with your favorite music player
 
