@@ -1,6 +1,6 @@
 #!/bin/sh
 # Download dependent packages if they are missing,
-# make mp3-dl executable (and it's dependent utils script)
+# make mdl executable (and it's dependent utils script)
 #  and place them in /usr/local/bin
 
 # shellcheck source=./utils.sh
@@ -31,7 +31,7 @@ missing_do_ ffmpeg "${install_ffmpeg}"
 missing_do_ mid3v2 "${install_mid3v2}"
 
 
-script="mp3-dl"
+script="mdl"
 chmod +x "${ABS_PATH}${script}.sh" "${ABS_PATH}utils.sh" 
 cp "${ABS_PATH}${script}.sh" "${BIN_PATH}${script}"
 cp "${ABS_PATH}utils.sh" "${BIN_PATH}${script}-utils"

@@ -27,7 +27,6 @@ get_OS() {
 }
 
 missing_do_() {
-	echo "Checking for ${1}..."
 	if [ "$(is_present "${1}")" -eq 1 ] ; then
 		shift
 		for cmd in "${@}"

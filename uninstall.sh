@@ -1,5 +1,5 @@
 #!/bin/sh
-# Remove the executable mp3-dl from /usr/local/bin
+# Remove the executable mdl from /usr/local/bin
 # and ask to remove the packages that might have been installed
 # shellcheck source=./utils.sh
 ABS_PATH="$(realpath "$(dirname "${0}")")/"
@@ -9,7 +9,7 @@ be_root
 ctrl_C "Uninstallation killed"
 
 path="/usr/local/bin/"
-script="mp3-dl"
+script="mdl"
 
 rm -f "${path}${script}" "${BIN_PATH}${script}-utils"
 [ ! -f "${path}${script}" ] && [ ! -f "${BIN_PATH}${script}-utils" ] && 
