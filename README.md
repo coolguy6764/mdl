@@ -31,7 +31,7 @@ To uninstall the program, execute `sudo ./uninstall.sh`.
 
 - **Minimal**
 
-`mdl -u URL`
+`mdl URL`
 ```
 .
 └── Inconnu
@@ -44,16 +44,16 @@ To uninstall the program, execute `sudo ./uninstall.sh`.
 
 To add a previously downloaded image as cover:
 
-`mdl -u URL -i /absolute/path/image `
+`mdl -i /absolute/path/image URL`
 
 To extract the cover from the website:
 
-`mdl -u URL -I `
+`mdl -I URL`
 
 
 - **Album and artist**
 
-`mdl -u URL -A "The Best of Brassens" -a "Georges Brassens"`
+`mdl -A "The Best of Brassens" -a "Georges Brassens" URL`
 ```
 .
 └── Georges Brassens
@@ -64,7 +64,7 @@ To extract the cover from the website:
 
 - **Destination folder**
 
-`mdl -u URL -d "/home/user/Music"`
+`mdl -d "/home/user/Music" URL`
 ```
 Music
 └── Inconnu
@@ -74,13 +74,13 @@ Music
 ```
 - **Integrate information to the mp3**
 
-`mdl -u URL -a "Georges Brassens" -A "The Best of Brassens" -g "French Music" -y 2019`
+`mdl -a "Georges Brassens" -A "The Best of Brassens" -g "French Music" -y 2019 URL`
 
 *Note: By default, the artist, album and genre are* "Inconnu" *and the year is* 0000.
 
 - **Remove expressions from titles**
 
-`mdl -u URL -r "(audio)/lyrics/live"`
+`mdl -r "(audio)/lyrics/live" URL`
 
 This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, with unsensitive case.
 
@@ -88,7 +88,7 @@ This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, with unse
 
 - **Extract artist from titles**
 
-`mdl -u URL -e`
+`mdl -e URL`
 
 This option is useful when the music titles have the pattern "artist - title". In this case, the program will remove "artist" from the title, integrate it to the mp3 and place the file in the artist directory.
 
