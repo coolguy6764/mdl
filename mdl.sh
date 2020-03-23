@@ -1,5 +1,4 @@
 #!/bin/sh
-# shellcheck source=./utils.sh
 #---------------------------------------------------------------------
 #  _
 # |_||aphaël
@@ -12,7 +11,6 @@
 #---------------------------------------------------------------------
 # Variables 
 #---------------------------------------------------------------------
-BIN_PATH="/usr/local/bin/"
 lang="fr"
 artist=""
 album=""
@@ -32,21 +30,21 @@ tempdir="temp"
 # Functions
 #---------------------------------------------------------------------
 
-# Error function: to call when a package is required
-# Arguments: package required
-required() {
-    echo "'${1}' is required. Please run installer script." && exit 1
+# Print the parameter as an error
+# and quit with error code
+error() {
+	echo "${1}" >&2
+	exit 1
 }
 
-utils="${scriptname}-utils"
-if [ -f "${BIN_PATH}$utils" ]; then
-     . "${utils}"
-else
-    required "${utils}"
-fi
+# Get Ctrl+C event to kill the script
+trap 'error' INT
 
-ctrl_C "program killed"
-
+# Print an error saying that parameter is required
+# and quit with error code
+required() {
+    error "'${1}' is required. Please run installer script."
+}
 
 # Print usage and options to use
 help_msg() {
@@ -56,37 +54,47 @@ OPTIONS:
 	-h
             Print this help message and exit
 
+        -l LANG
+            Set the language for unknown artist and album,
+            used for the folder hierarchy.
+            For example:
+            ${scriptname} -l en -a \"Brassens\" URL
+                -> English, artist is Brassens and album is unknown
+                    so folder hierarchy will be Brassens/Unknown/
+            ${scriptname} -l fr -A \"Super album\" URL
+                -> French, artist is unknown and album is Super album
+                    so folder hierarchy will be Inconnu/Super album/
+
 	-i PATH
             Set the absolute path to the cover image (not compatible with -I)
 
 	-I
             Extract the image from the website (not compatible with -i)
 
-	-u
-            Indicate the music/playlist address
-
 	-e
-            Extract the artist name from the title (title = \"artist - song\")
+            Extract the artist name from the title. To use when
+            title has the pattern \"artist - title\". If the pattern
+            is not present, artist is set to unknown or to the value
+            given by the -a option.
 
 	-a \"Artist\"
-            Set the artist name
+            Set the artist name for folder hierarchy and metadata
 
 	-A \"Album\"
-            Set the album name
+            Set the album name for folder hierarchy and metadata
 
 	-g \"Genre\"
-            Set the genre name
+            Set the genre name for metadata
 
 	-y XXXX
-            Set the year
+            Set the year for metadata
 
 	-d DIR
-            Set the absolute path to the destination directory where to download the music
+            Set the absolute path to the destination directory
 
-	-r \"exp\"
-            Remove expression(s) in the video title to create the song name.
-            Expression \" - \" is removed by default.
-            Format: \"exp1/exp2/[...]/expN\" 
+	-r \"exp1/exp2/[...]/expN\"
+            Remove expression(s) in the music title. Expression \" - \"
+            is removed by default.
     "
 }
 
@@ -315,9 +323,9 @@ move_file() {
 #---------------------------------------------------------------------
 
 # Check required packages
-missing_do_ youtube-dl "required 'youtube-dl'"
-missing_do_ ffmpeg "required 'ffmpeg'"
-missing_do_ mid3v2 "required 'mid3v2'"
+command -v youtube-dl > /dev/null || required "youtube-dl"
+command -v ffmpeg > /dev/null || required "ffmpeg"
+command -v mid3v2 > /dev/null || required "mid3v2"
 
 # Get different options
 while getopts ":hl:ea:A:g:y:Ii:d:r:" opt; do

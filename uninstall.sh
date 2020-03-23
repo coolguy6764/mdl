@@ -1,39 +1,56 @@
 #!/bin/sh
 # Remove the executable mdl from /usr/local/bin
 # and ask to remove the packages that might have been installed
-# shellcheck source=./utils.sh
-ABS_PATH="$(realpath "$(dirname "${0}")")/"
-. "${ABS_PATH}utils.sh"
 
-be_root
-ctrl_C "Uninstallation killed"
+BIN_PATH="/usr/local/bin"
+SCRIPT="mdl"
 
-path="/usr/local/bin/"
-script="mdl"
+trap 'error' INT
 
-rm -f "${path}${script}" "${BIN_PATH}${script}-utils"
-[ ! -f "${path}${script}" ] && [ ! -f "${BIN_PATH}${script}-utils" ] && 
-    echo "${script} is uninstalled :("
+# Print an error message and exit
+error() {
+    echo "${1}" >&2; exit 1
+}
 
-printf "Do you want to remove dependent packages ? [y/n] " 
+# Set package manager for uninstallation
+get_package_manager() {
+    deb_based=false; arch_based=false
+    command -v apt > /dev/null &&
+        deb_based=true && package_manager=apt && return 0
+    command -v pacman > /dev/null &&
+        arch_based=true && package_manager=pacman && return 0
+    error "No package manager known found"
+}
+
+get_rm_package_option() {
+    ${deb_based} && rm_opt="remove" && return 0
+    ${arch_based} && rm_opt="-Rs" && return 0
+    error "package manager unset or unknown"
+}
+
+[ "$(id -u)" -ne 0 ] && error "Please run as root"
+
+[ -f "${BIN_PATH}/${SCRIPT}" ] && rm "${BIN_PATH}/${SCRIPT}"
+[ -f "${BIN_PATH}/${SCRIPT}" ] || echo "${SCRIPT} is uninstalled :("
+
+printf "
+Do you want to remove dependent packages ?
+You will be asked for confirmation for each package.
+[y/n] "
 read -r choice
 if [ "${choice}" = "y" ]; then
-	echo "Removing dependent packages..."
-
-        OS="$(get_OS)"
-        echo "Uninstalling on ${OS} based system..."
-
-	if [ "${OS}" = "${DEBIAN}" ]; then
-		find / -name youtube-dl | sudo xargs rm -f
-		[ "$(is_present "curl")" -eq 0 ] && apt remove curl
-		[ "$(is_present "ffmpeg")" -eq 0 ] && apt remove ffmpeg
-		[ "$(is_present "mid3v2")" -eq 0 ] && apt remove python-mutagen
-	elif [ "${OS}" = "${ARCH}" ]; then
-		[ "$(is_present "youtube-dl")" -eq 0 ] && pacman -R -s youtube-dl
-		[ "$(is_present "ffmpeg")" -eq 0 ] && pacman -R -s ffmpeg
-		[ "$(is_present "mid3v2")" -eq 0 ] && pacman -R -s python-mutagen
-	fi
-	echo "done"
+    echo "Removing dependent packages..."
+    get_package_manager &&
+        get_rm_package_option &&
+        echo "Uninstalling with ${package_manager}..."
+    command -v curl > /dev/null && ${package_manager} ${rm_opt} curl
+    command -v ffmpeg > /dev/null && ${package_manager} ${rm_opt} ffmpeg
+    command -v mid3v2 > /dev/null && ${package_manager} ${rm_opt} python-mutagen
+    if command -v youtube-dl > /dev/null; then
+        ${deb_based} && find / -name youtube-dl | sudo xargs rm -f
+        ${arch_based} && ${package_manager} ${rm_opt} youtube-dl
+    fi
 fi
 
+echo "Done" && exit
 
