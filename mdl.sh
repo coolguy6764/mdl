@@ -22,8 +22,8 @@ cover=""
 dest_directory=""
 all_expressions=""
 extract_artist=false
-artist_opt=false
-cover_opt=false
+set_artist=false
+set_cover=false
 extract_cover=false
 scriptname="$(basename "${0}" | sed "s/.sh$//")"
 tempdir="temp"
@@ -120,16 +120,27 @@ sim_call() {
 		    ${max}) sep=" and ";;
 		    *)      sep=", ";;
 	    esac
-	    printf "${sep}${arg}"
+	    printf "%s" "${sep}${arg}"
 	    i=$((i+1))
     done
     error " are not callable simultaneously"
 }
 
+# Set initial variables values
+set_variables() {
+    [ "${dest_directory}" = "" ] && dest_directory="$(pwd)"
+    [ "${LANG}" = "fr" ] && unknown="Inconnu" || unknown="Unknown"
+    [ "${album}" = "" ] && album="${unknown}"
+    [ "${genre}" = "" ] && genre="${unknown}"
+    [ "${year}" = "" ] && year="0000"
+    [ "${artist}" = "" ] && artist="${unknown}" # overwritten by artist extraction if there is
+    [ "${set_artist}" = true ] && artist_opt="${artist}"
+}
+
 # Go to the wanted directory if not already there
 goto() {
-    [ "$(basename "$(pwd)")" = "$(basename "${1}")" ] || 
-        cd "${1}" || return 1
+    [ "$(basename "$(pwd)")" = "$(basename "${1}")" ] ||
+        [ -d "${1}" ] && cd "${1}" || return 1
 }
 
 # Create temporary directory if not already created
@@ -143,7 +154,7 @@ create_tempdir() {
 del_tempdir() {
     actualdir="$(pwd)"
     goto "${dest_directory}" && [ -d "${tempdir}" ] && rm -r "${tempdir}" || return 1
-    if [ ! "$(basename ${actualdir})" = "${tempdir}" ]; then
+    if [ ! "$(basename "${actualdir}")" = "${tempdir}" ]; then
        cd "${actualdir}" || return 1
     fi
 }
@@ -154,9 +165,9 @@ download() {
     goto "${tempdir}" || return 1
     
     echo "" && echo "Start downloading music from url..."
+    opt=""
     [ "${cover}" = "extract-from-web" ] && opt=--embed-thumbnail
-
-    youtube-dl -i -x --audio-format mp3 ${opt} "${URL}" -o "%(title)s.%(ext)s" && 
+    youtube-dl -i -x --audio-format mp3 ${opt} "${URL}" -o "%(title)s.%(ext)s" &&
        cd "${actualdir}" || return 1
 }
 
@@ -214,9 +225,14 @@ remove_expressions() {
 extract_artist() {
     if [ ${extract_artist} = true ]; then
         [ -z "${filename}" ] && return 1 # variable filename must be non-zero
-        echo "${filename}" | grep " - " > /dev/null && 
-            artist=${filename%% - *} && 
+        if echo "${filename}" | grep -q " - "; then
+            artist=${filename%% - *}
             filename="$(echo "${filename}" | sed "s/${artist}//")"
+        else
+            # no artist to extract
+            [ "${set_artist}" = false ] && artist="${unknown}"
+            [ "${set_artist}" = true ] && artist="${artist_opt}"
+        fi
     fi
     return 0
 }
@@ -250,8 +266,8 @@ rename_file() {
 
 add_cover() {
     [ -f "${filename}" ] || return 1 # filename must be present
-    if [ "${cover_opt}" = true ]; then
-        [ ! -z ${cover} ] && temp_file="_${filename}" &&
+    if [ "${set_cover}" = true ]; then
+        [ -n "${cover}" ] && temp_file="_${filename}" &&
             ffmpeg -hide_banner -i "${filename}" -i "${cover}" \
             -map 0 -c:a copy -map 1 -c:v copy "${temp_file}" &&
             rm "${filename}" && mv "${temp_file}" "${filename}" || return 1
@@ -280,7 +296,8 @@ move_file() {
         [ -f "${tempdir}/${filename}" ] &&
         hierarchy="${artist}/${album}" &&
         mkdir -p "${hierarchy}" &&
-        mv -f "${tempdir}/${filename}" "${hierarchy}/${filename}" || return 1
+        mv -f "${tempdir}/${filename}" "${hierarchy}/${filename}" &&
+        echo "Moved ${filename} to ${hierarchy}/" || return 1
 
     cd "${actualdir}" || return 1
 }
@@ -289,25 +306,30 @@ move_file() {
 # Script starts here
 #---------------------------------------------------------------------
 
+# Check required packages
+missing_do_ youtube-dl "required 'youtube-dl'"
+missing_do_ ffmpeg "required 'ffmpeg'"
+missing_do_ mid3v2 "required 'mid3v2'"
+
 # Get different options
-while getopts ":hea:A:g:y:Ii:d:r:" options; do
-    case "${options}" in
+while getopts ":hea:A:g:y:Ii:d:r:" opt; do
+    case "${opt}" in
     h)  help_msg && exit 0;;
     e)  extract_artist=true;;
-    a)  artist_opt=true && artist=${OPTARG};;
+    a)  set_artist=true && artist=${OPTARG};;
     A)  album=${OPTARG};;
     g)  genre=${OPTARG};;
     y)  year=${OPTARG};;
     i)  if [ "${extract_cover}" = false ];then
-            cover_opt=true
+            set_cover=true
         else
-            sim_call "${options}" "I"
+            sim_call "${opt}" "I"
         fi
         cover=${OPTARG};;
-    I) if [ "${cover_opt}" = false ];then
+    I) if [ "${set_cover}" = false ];then
     	    extract_cover=true
         else
-    	    sim_call "${options}" "i"
+            sim_call "${opt}" "i"
         fi
         cover="extract-from-web";;
     d)  dest_directory=${OPTARG};;	
@@ -316,25 +338,11 @@ while getopts ":hea:A:g:y:Ii:d:r:" options; do
     esac
 done
 
-
 # Check music url 
-for last in "$@"; do :; done
-URL="${last}"
+for URL in "$@"; do :; done
 [ "${URL}" = "" ] && exit_abnormal
 
-# Set variables
-[ "${dest_directory}" = "" ] && dest_directory="$(pwd)"
-[ "${LANG}" = "fr" ] && unknown="Inconnu" || unknown="Unknown"
-[ "${artist}" = "" ] &&	artist="${unknown}" # will be overwritten by extraction if there is
-[ "${album}" = "" ] && album="${unknown}"
-[ "${genre}" = "" ] && genre="${unknown}"
-[ "${year}" = "" ] && year="0000"
-
-# Check required packages
-missing_do_ youtube-dl "required 'youtube-dl'"
-missing_do_ ffmpeg "required 'ffmpeg'"
-missing_do_ mid3v2 "required 'mid3v2'"
-
+set_variables
 del_tempdir 
 
 create_tempdir && 
@@ -343,14 +351,6 @@ create_tempdir &&
 
 del_tempdir
 
-# # Main program
-# case ${artopt} in
-# 	0 | a)  arbor && download && rename_plus_info;;
-# 	e)      cd "${dest_directory}" || error "Can not go to ${dest_directory}"
-# 		download && rename_plus_info;;
-# 	esac
-
-# exit 0
 
 
 
