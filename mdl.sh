@@ -13,7 +13,7 @@
 # Variables 
 #---------------------------------------------------------------------
 BIN_PATH="/usr/local/bin/"
-LANG="fr"
+lang="fr"
 artist=""
 album=""
 genre=""
@@ -129,12 +129,20 @@ sim_call() {
 # Set initial variables values
 set_variables() {
     [ "${dest_directory}" = "" ] && dest_directory="$(pwd)"
-    [ "${LANG}" = "fr" ] && unknown="Inconnu" || unknown="Unknown"
+    set_language
     [ "${album}" = "" ] && album="${unknown}"
     [ "${genre}" = "" ] && genre="${unknown}"
     [ "${year}" = "" ] && year="0000"
     [ "${artist}" = "" ] && artist="${unknown}" # overwritten by artist extraction if there is
     [ "${set_artist}" = true ] && artist_opt="${artist}"
+}
+
+# Set "unknown" variable depending on language
+set_language() {
+    case "${lang}" in
+        "fr")   unknown="Inconnu";;
+        *)   unknown="Unknown";;
+    esac
 }
 
 # Go to the wanted directory if not already there
@@ -312,9 +320,10 @@ missing_do_ ffmpeg "required 'ffmpeg'"
 missing_do_ mid3v2 "required 'mid3v2'"
 
 # Get different options
-while getopts ":hea:A:g:y:Ii:d:r:" opt; do
+while getopts ":hl:ea:A:g:y:Ii:d:r:" opt; do
     case "${opt}" in
     h)  help_msg && exit 0;;
+    l)  lang=${OPTARG};;
     e)  extract_artist=true;;
     a)  set_artist=true && artist=${OPTARG};;
     A)  album=${OPTARG};;
