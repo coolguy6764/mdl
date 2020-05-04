@@ -187,18 +187,22 @@ download() {
        cd "${actualdir}" || return 1
 }
 
+
 # Take every mp3 file in temporary directory,
 # remove unwanted expressions, get music info,
 # rename, add cover and metadata to the files and
 # put them in their folder hierarchy
 manage_tempfiles() {
-    actualdir="$(pwd)"
-    goto "${tempdir}" && ls ./*.mp3* > /dev/null || return 1
+    actualdir="$(pwd)" &&
+        goto "${tempdir}" &&
+        ls ./*.mp3* > /dev/null &&
+        create_time_file || return 1
     
-    music_number=1
-    for filename in *".mp3"; do
-        actual_filename="${filename}"
-        remove_expressions &&
+    for filename in *".mp3"
+    do
+        actual_filename="${filename}" &&
+            get_music_number &&
+            remove_expressions &&
             extract_artist &&
             extract_title &&
             clear_filename &&
@@ -206,9 +210,24 @@ manage_tempfiles() {
             add_cover &&
             add_metadata &&
             move_file || return 1
-        music_number=$((music_number+1))
     done
     cd "${actualdir}" || return 1
+}
+
+# Store downloading time of musics in a file
+# and sort them
+create_time_file() {
+    rm -f temp
+    for file in *.mp3
+    do
+        echo "$(stat -c %w "$file" | awk '{print $2}')" >> temp
+    done
+    sort temp > sorted_temp
+}
+
+# Extract the music number from sorted_temp file
+get_music_number() {
+    music_number=$(grep -n "$(stat -c %w "$filename" | awk '{print $2}')" sorted_temp | sed 's/:.*//')
 }
 
 # Remove unwanteed expressions from music filename
