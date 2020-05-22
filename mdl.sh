@@ -220,14 +220,14 @@ create_time_file() {
     rm -f temp
     for file in *.mp3
     do
-        echo "$(stat -c %w "$file" | awk '{print $2}')" >> temp
+        stat -c %x "$file" >> temp
     done
     sort temp > sorted_temp
 }
 
 # Extract the music number from sorted_temp file
 get_music_number() {
-    music_number=$(grep -n "$(stat -c %w "$filename" | awk '{print $2}')" sorted_temp | sed 's/:.*//')
+    music_number=$(grep -n "$(stat -c %x "$filename")" sorted_temp | sed 's/:.*//')
 }
 
 # Remove unwanteed expressions from music filename
