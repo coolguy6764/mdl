@@ -92,7 +92,7 @@ OPTIONS:
 	-d DIR
             Set the absolute path to the destination directory
 
-	-r \"exp1/exp2/[...]/expN\"
+	-r \"regexp1/regexp2/[...]/regexpN\"
             Remove expression(s) in the music title. Expression \" - \"
             is removed by default.
     "
@@ -274,8 +274,10 @@ extract_artist() {
 
 extract_title() {
     [ -z "${filename}" ] && return 1 # variable filename must be non-zero
-    # Remove artist separator, spaces before and after the title and file extension
-    title="$(echo "${filename}" | sed "s/\s-\s//; s/\s*\<//; s/\s*$//; s/.mp3$//")"
+    # Remove every " - " occurence, spaces before and after the title and file extension
+    noext="$(echo "${filename}" | sed "s/\\.mp3$//")"
+    title="$(echo "${noext}" | sed "s/ *- *//g; s/^ *//; s/ *$//")"
+    echo "$title"
     filename="${title}.mp3"
     return 0
 }
@@ -284,9 +286,9 @@ extract_title() {
 clear_filename() {
     [ -z "${filename}" ] && return 1 # variable filename must be non-zero
     
-    # Remove separator - and spaces before and after the filename
-    noext="$(echo "${filename}" | sed "s/.mp3//")"
-    filename="$(echo "${noext}" | sed "s/\s//g").mp3"
+    # Remove spaces in the filename
+    noext="$(echo "${filename}" | sed "s/\\.mp3$//")"
+    filename="$(echo "${noext}" | sed "s/ *//g").mp3"
     return 0
 }
 
