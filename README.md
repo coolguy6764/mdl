@@ -91,9 +91,3 @@ This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, with unse
 `mdl -e URL`
 
 This option is useful when the music titles have the pattern "artist - title". In this case, the program will remove "artist" from the title, integrate it to the mp3 and place the file in the artist directory.
-
-
-## Contact
-To report a bug or a comment, you can join me at:
-- Mastodon: rafutek@mamot.fr
-- Mail: raphaelroy@tutanota.com
