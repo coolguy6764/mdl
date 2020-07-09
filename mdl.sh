@@ -107,7 +107,7 @@ USAGE:
 DESCRIPTION: 
     mdl is a utility to download music from the web,
     store it where you want in a nice folder hierarchy,
-    and add some metadata to the downloaded mp3 file(s)."
+    and add some metadata to the downloaded ogg file(s)."
 }
 
 # Error function: print usage and exit
@@ -175,7 +175,7 @@ del_tempdir() {
     fi
 }
 
-# Download music as mp3
+# Download music as ogg
 download() { 
     actualdir="$(pwd)"
     goto "${tempdir}" || return 1
@@ -183,22 +183,22 @@ download() {
     echo "" && echo "Start downloading music from url..."
     opt=""
     [ "${cover}" = "extract-from-web" ] && opt=--embed-thumbnail
-    youtube-dl -i -x --audio-format mp3 ${opt} "${URL}" -o "%(title)s.%(ext)s" &&
+    youtube-dl -i -x --audio-format vorbis ${opt} "${URL}" -o "%(title)s.%(ext)s" &&
        cd "${actualdir}" || return 1
 }
 
 
-# Take every mp3 file in temporary directory,
+# Take every ogg file in temporary directory,
 # remove unwanted expressions, get music info,
 # rename, add cover and metadata to the files and
 # put them in their folder hierarchy
 manage_tempfiles() {
     actualdir="$(pwd)" &&
         goto "${tempdir}" &&
-        ls ./*.mp3* > /dev/null &&
+        ls ./*.ogg* > /dev/null &&
         create_time_file || return 1
     
-    for filename in *".mp3"
+    for filename in *".ogg"
     do
         actual_filename="${filename}" &&
             get_music_number &&
@@ -218,7 +218,7 @@ manage_tempfiles() {
 # and sort them
 create_time_file() {
     rm -f temp
-    for file in *.mp3
+    for file in *.ogg
     do
         stat -c %x "$file" >> temp
     done
@@ -275,10 +275,9 @@ extract_artist() {
 extract_title() {
     [ -z "${filename}" ] && return 1 # variable filename must be non-zero
     # Remove every " - " occurence, spaces before and after the title and file extension
-    noext="$(echo "${filename}" | sed "s/\\.mp3$//")"
+    noext="$(echo "${filename}" | sed "s/\\.ogg$//")"
     title="$(echo "${noext}" | sed "s/ *- *//g; s/^ *//; s/ *$//")"
-    echo "$title"
-    filename="${title}.mp3"
+    filename="${title}.ogg"
     return 0
 }
 
@@ -287,8 +286,8 @@ clear_filename() {
     [ -z "${filename}" ] && return 1 # variable filename must be non-zero
     
     # Remove spaces in the filename
-    noext="$(echo "${filename}" | sed "s/\\.mp3$//")"
-    filename="$(echo "${noext}" | sed "s/ *//g").mp3"
+    noext="$(echo "${filename}" | sed "s/\\.ogg$//")"
+    filename="$(echo "${noext}" | sed "s/ *//g").ogg"
     return 0
 }
 

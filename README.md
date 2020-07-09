@@ -36,7 +36,7 @@ To uninstall the program, execute `sudo ./uninstall.sh`.
 .
 └── Inconnu
     └── Inconnu
-        └── music_title.mp3
+        └── music_title.ogg
         └── ...       
 ```
 
@@ -58,7 +58,7 @@ To extract the cover from the website:
 .
 └── Georges Brassens
     └── The Best of Brassens
-        └── music_title.mp3
+        └── music_title.ogg
         └── ...       
 ```
 
@@ -69,10 +69,10 @@ To extract the cover from the website:
 Music
 └── Inconnu
     └── Inconnu
-        └── music_title.mp3
+        └── music_title.ogg
         └── ...       
 ```
-- **Integrate information to the mp3**
+- **Integrate information to the ogg**
 
 `mdl -a "Georges Brassens" -A "The Best of Brassens" -g "French Music" -y 2019 URL`
 
@@ -90,7 +90,7 @@ This will remove the expressions *"(audio)"*, *"lyrics"* and *"live"*, with unse
 
 `mdl -e URL`
 
-This option is useful when the music titles have the pattern "artist - title". In this case, the program will remove "artist" from the title, integrate it to the mp3 and place the file in the artist directory.
+This option is useful when the music titles have the pattern "artist - title". In this case, the program will remove "artist" from the title, integrate it to the ogg and place the file in the artist directory.
 
 
 ## Contact
