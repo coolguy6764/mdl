@@ -9,7 +9,7 @@
 #---------------------------------------------------------------------
 
 #---------------------------------------------------------------------
-# Variables 
+# Variables
 #---------------------------------------------------------------------
 lang="fr"
 artist=""
@@ -33,8 +33,8 @@ tempdir="temp"
 # Print the parameter as an error
 # and quit with error code
 error() {
-	echo "${1}" >&2
-	exit 1
+    echo "${1}" >&2
+    exit 1
 }
 
 # Get Ctrl+C event to kill the script
@@ -107,29 +107,28 @@ USAGE:
 DESCRIPTION: 
     mdl is a utility to download music from the web,
     store it where you want in a nice folder hierarchy,
-    and add some metadata to the downloaded ogg file(s)."
+    and add some metadata to the downloaded flac file(s)."
 }
 
 # Error function: print usage and exit
-exit_abnormal(){
-    error "$(usage_msg)" 
+exit_abnormal() {
+    error "$(usage_msg)"
 }
 
-# Error function: to call when options are not compatible 
+# Error function: to call when options are not compatible
 # arguments: options
 sim_call() {
     printf "Options "
     i=0
-    max=$(( ${#} - 1 ))
-    for arg in "${@}"
-    do
-	    case ${i} in
-		    0)      sep="";;
-		    ${max}) sep=" and ";;
-		    *)      sep=", ";;
-	    esac
-	    printf "%s" "${sep}${arg}"
-	    i=$((i+1))
+    max=$((${#} - 1))
+    for arg in "${@}"; do
+        case ${i} in
+        0) sep="" ;;
+        ${max}) sep=" and " ;;
+        *) sep=", " ;;
+        esac
+        printf "%s" "${sep}${arg}"
+        i=$((i + 1))
     done
     error " are not callable simultaneously"
 }
@@ -140,7 +139,7 @@ set_variables() {
     set_language
     [ "${album}" = "" ] && album="${unknown}"
     [ "${genre}" = "" ] && genre="${unknown}"
-    [ "${year}" = "" ] && year="0000"
+    [ "${year}" = "" ] && year="${unknown}"
     [ "${artist}" = "" ] && artist="${unknown}" # overwritten by artist extraction if there is
     [ "${set_artist}" = true ] && artist_opt="${artist}"
 }
@@ -148,8 +147,8 @@ set_variables() {
 # Set "unknown" variable depending on language
 set_language() {
     case "${lang}" in
-        "fr")   unknown="Inconnu";;
-        *)   unknown="Unknown";;
+    "fr") unknown="Inconnu" ;;
+    *) unknown="Unknown" ;;
     esac
 }
 
@@ -162,7 +161,7 @@ goto() {
 # Create temporary directory if not already created
 create_tempdir() {
     actualdir="$(pwd)"
-    goto "${dest_directory}" && [ ! -d "${tempdir}" ] && 
+    goto "${dest_directory}" && [ ! -d "${tempdir}" ] &&
         mkdir "${tempdir}" && cd "${actualdir}" || return 1
 }
 
@@ -171,35 +170,31 @@ del_tempdir() {
     actualdir="$(pwd)"
     goto "${dest_directory}" && [ -d "${tempdir}" ] && rm -r "${tempdir}" || return 1
     if [ ! "$(basename "${actualdir}")" = "${tempdir}" ]; then
-       cd "${actualdir}" || return 1
+        cd "${actualdir}" || return 1
     fi
 }
 
-# Download music as ogg
-download() { 
+# Download music as flac
+download() {
     actualdir="$(pwd)"
     goto "${tempdir}" || return 1
-    
+
     echo "" && echo "Start downloading music from url..."
     opt=""
     [ "${cover}" = "extract-from-web" ] && opt=--embed-thumbnail
-    youtube-dl -i -x --audio-format vorbis ${opt} "${URL}" -o "%(title)s.%(ext)s" &&
-       cd "${actualdir}" || return 1
+    youtube-dl -i -x --audio-format flac ${opt} "${URL}" -o "%(title)s.%(ext)s" &&
+        cd "${actualdir}" || return 1
 }
 
-
-# Take every ogg file in temporary directory,
-# remove unwanted expressions, get music info,
-# rename, add cover and metadata to the files and
-# put them in their folder hierarchy
+# Process every flac file present in temporary directory
+# and put them in their folder hierarchy
 manage_tempfiles() {
     actualdir="$(pwd)" &&
         goto "${tempdir}" &&
-        ls ./*.ogg* > /dev/null &&
+        ls ./*.flac* >/dev/null &&
         create_time_file || return 1
-    
-    for filename in *".ogg"
-    do
+
+    for filename in *".flac"; do
         actual_filename="${filename}" &&
             get_music_number &&
             remove_expressions &&
@@ -218,11 +213,10 @@ manage_tempfiles() {
 # and sort them
 create_time_file() {
     rm -f temp
-    for file in *.ogg
-    do
-        stat -c %x "$file" >> temp
+    for file in *.flac; do
+        stat -c %x "$file" >>temp
     done
-    sort temp > sorted_temp
+    sort temp >sorted_temp
 }
 
 # Extract the music number from sorted_temp file
@@ -240,16 +234,16 @@ remove_expressions() {
 
         while [ ${iterate} = true ]; do
             # Iterate while expressions string contains a / character
-            echo "${expressions}" | grep / > /dev/null || iterate=false
-            
+            echo "${expressions}" | grep / >/dev/null || iterate=false
+
             # Get expression before the / character
             exp=${expressions##*/}
 
             # Keep the expressions after the / character
-	    expressions=${expressions%/*}
+            expressions=${expressions%/*}
 
             # Remove the expression from the filename
-            [ ${#exp} -gt 0 ] && 
+            [ ${#exp} -gt 0 ] &&
                 newname="$(echo "${newname}" | sed "s/${exp}//gI")"
         done
         filename="${newname}"
@@ -275,25 +269,23 @@ extract_artist() {
 extract_title() {
     [ -z "${filename}" ] && return 1 # variable filename must be non-zero
     # Remove every " - " occurence, spaces before and after the title and file extension
-    noext="$(echo "${filename}" | sed "s/\\.ogg$//")"
+    noext="$(echo "${filename}" | sed "s/\\.flac$//")"
     title="$(echo "${noext}" | sed "s/ *- *//g; s/^ *//; s/ *$//")"
-    filename="${title}.ogg"
+    filename="${title}.flac"
     return 0
 }
 
 # Remove uneeded characters
 clear_filename() {
     [ -z "${filename}" ] && return 1 # variable filename must be non-zero
-    
+
     # Remove spaces in the filename
-    noext="$(echo "${filename}" | sed "s/\\.ogg$//")"
-    filename="$(echo "${noext}" | sed "s/ *//g").ogg"
+    noext="$(echo "${filename}" | sed "s/\\.flac$//")"
+    filename="$(echo "${noext}" | sed "s/ *//g").flac"
     return 0
 }
 
 rename_file() {
-    # The actual file must be present and its new name non-zero
-    [ -f "${actual_filename}" ] && [ -z "${filename}" ] && return 1
     if [ ! "${actual_filename}" = "${filename}" ]; then
         mv "${actual_filename}" "${filename}" || return 1
     fi
@@ -301,28 +293,33 @@ rename_file() {
 }
 
 add_cover() {
-    [ -f "${filename}" ] || return 1 # filename must be present
     if [ "${set_cover}" = true ]; then
-        [ -n "${cover}" ] && temp_file="_${filename}" &&
-            ffmpeg -hide_banner -i "${filename}" -i "${cover}" \
-            -map 0 -c:a copy -map 1 -c:v copy "${temp_file}" &&
-            rm "${filename}" && mv "${temp_file}" "${filename}" || return 1
+        metaflac --import-picture-from="${cover}" "$filename" || return 1
+        echo "Added cover ${cover} to ${filename}"
     fi
-    return 0
 }
 
 # Add album, artist, year, genre and image if wanted
 add_metadata() {
-    [ -f "${filename}" ] &&
-        mid3v2 -T "${music_number}" -t "${title}" -a "${artist}"\
-        -A "${album}" -g "${genre}" -y ${year} "${filename}" &&
-        echo "Added metadata to ${filename}:" &&
+    [ ! -f "${filename}" ] && return 1
+    tags_file=".tags.txt"
+    rm -f $tags_file
+    [ "$title" ] && echo "title=$title" >>$tags_file
+    [ "$artist" ] && echo "artist=$artist" >>$tags_file
+    [ "$album" ] && echo "album=$album" >>$tags_file
+    [ "$music_number" ] && echo "tracknumber=$music_number" >>$tags_file
+    [ "$genre" ] && echo "genre=$genre" >>$tags_file
+    [ "$year" ] && echo "year=$year" >>$tags_file
+    metaflac --import-tags-from=$tags_file "$filename" || return 1
+    rm -f $tags_file
+
+    echo "Added metadata to ${filename}:" &&
         echo "  num: ${music_number}" &&
         echo "  title: ${title}" &&
         echo "  artist: ${artist}" &&
         echo "  album: ${album}" &&
         echo "  genre: ${genre}" &&
-        echo "  year: ${year}" || return 1
+        echo "  year: ${year}"
 }
 
 # Place file in appropriate directory
@@ -343,51 +340,50 @@ move_file() {
 #---------------------------------------------------------------------
 
 # Check required packages
-command -v youtube-dl > /dev/null || required "youtube-dl"
-command -v ffmpeg > /dev/null || required "ffmpeg"
-command -v mid3v2 > /dev/null || required "mid3v2"
+command -v youtube-dl >/dev/null || required "youtube-dl"
+command -v flac >/dev/null || required "ffmpeg"
 
 # Get different options
 while getopts ":hl:ea:A:g:y:Ii:d:r:" opt; do
     case "${opt}" in
-    h)  help_msg && exit 0;;
-    l)  lang=${OPTARG};;
-    e)  extract_artist=true;;
-    a)  set_artist=true && artist=${OPTARG};;
-    A)  album=${OPTARG};;
-    g)  genre=${OPTARG};;
-    y)  year=${OPTARG};;
-    i)  if [ "${extract_cover}" = false ];then
+    h) help_msg && exit 0 ;;
+    l) lang=${OPTARG} ;;
+    e) extract_artist=true ;;
+    a) set_artist=true && artist=${OPTARG} ;;
+    A) album=${OPTARG} ;;
+    g) genre=${OPTARG} ;;
+    y) year=${OPTARG} ;;
+    i)
+        if [ "${extract_cover}" = false ]; then
             set_cover=true
         else
             sim_call "${opt}" "I"
         fi
-        cover=${OPTARG};;
-    I) if [ "${set_cover}" = false ];then
-    	    extract_cover=true
+        cover=${OPTARG}
+        ;;
+    I)
+        if [ "${set_cover}" = false ]; then
+            extract_cover=true
         else
             sim_call "${opt}" "i"
         fi
-        cover="extract-from-web";;
-    d)  dest_directory=${OPTARG};;	
-    r)  all_expressions=${OPTARG};;
-    *)  exit_abnormal;;
+        cover="extract-from-web"
+        ;;
+    d) dest_directory=${OPTARG} ;;
+    r) all_expressions=${OPTARG} ;;
+    *) exit_abnormal ;;
     esac
 done
 
-# Check music url 
+# Get music url
 for URL in "$@"; do :; done
 [ "${URL}" = "" ] && exit_abnormal
 
 set_variables
-del_tempdir 
+del_tempdir
 
-create_tempdir && 
-    download && 
+create_tempdir &&
+    download &&
     manage_tempfiles || echo "Runtime error" >&2
 
 del_tempdir
-
-
-
-
